@@ -134,3 +134,10 @@ SPI_Master_Transmit/Debug/makefile
 *.opt
 *.mk
 *.opt
+*.launch
+*.obj
+*.map
+*.mk
+*.out
+*.launch
+*.xml
