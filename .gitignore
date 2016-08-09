@@ -128,3 +128,9 @@ New folder/Debug/makefile
 *.ccxml
 SPI_Master_Transmit/Debug/makefile
 /Debug/makefile
+*.map
+*.out
+*.xml
+*.opt
+*.mk
+*.opt

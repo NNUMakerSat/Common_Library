@@ -4,7 +4,7 @@
 
 SHELL = cmd.exe
 
-CG_TOOL_ROOT := C:/ti/ccsv6/tools/compiler/ti-cgt-msp430_4.4.7
+CG_TOOL_ROOT := C:/ti/ccsv6/tools/compiler/ti-cgt-msp430_15.12.1.LTS
 
 GEN_OPTS__FLAG := 
 GEN_CMDS__FLAG := 
@@ -13,9 +13,8 @@ ORDERED_OBJS += \
 "./main.obj" \
 "../lnk_msp430fr6989.cmd" \
 $(GEN_CMDS__FLAG) \
--llibmpu_init.a \
--l"libmath.a" \
--l"libc.a" \
+-llibmath.a \
+-llibc.a \
 
 -include ../makefile.init
 
@@ -46,6 +45,9 @@ ifneq ($(strip $(ASM_DEPS)),)
 endif
 ifneq ($(strip $(CC_DEPS)),)
 -include $(CC_DEPS)
+endif
+ifneq ($(strip $(SV7A_DEPS)),)
+-include $(SV7A_DEPS)
 endif
 ifneq ($(strip $(S55_DEPS)),)
 -include $(S55_DEPS)
@@ -138,20 +140,20 @@ all: 6989LSM9DS0.out
 6989LSM9DS0.out: $(OBJS) $(CMD_SRCS) $(GEN_CMDS)
 	@echo 'Building target: $@'
 	@echo 'Invoking: MSP430 Linker'
-	"C:/ti/ccsv6/tools/compiler/ti-cgt-msp430_4.4.7/bin/cl430" -vmspx --abi=eabi --data_model=restricted --use_hw_mpy=F5 --advice:power=all --advice:hw_config=all -g --define=__MSP430FR6989__ --define=_MPU_ENABLE --display_error_number --diag_warning=225 --diag_wrap=off --silicon_errata=CPU21 --silicon_errata=CPU22 --silicon_errata=CPU40 --printf_support=minimal -z -m"6989LSM9DS0.map" --stack_size=160 --heap_size=160 --cinit_hold_wdt=on -i"C:/ti/ccsv6/ccs_base/msp430/include" -i"C:/ti/ccsv6/tools/compiler/ti-cgt-msp430_4.4.7/lib" -i"C:/ti/ccsv6/tools/compiler/ti-cgt-msp430_4.4.7/include" -i"C:/ti/ccsv6/ccs_base/msp430/lib/5xx_6xx_FRxx" -i"C:/ti/ccsv6/ccs_base/msp430/lib/FR59xx" --priority --reread_libs --define=_MPU_ENABLE --diag_wrap=off --display_error_number --warn_sections --xml_link_info="6989LSM9DS0_linkInfo.xml" --use_hw_mpy=F5 --rom_model -o "6989LSM9DS0.out" $(ORDERED_OBJS)
+	"C:/ti/ccsv6/tools/compiler/ti-cgt-msp430_15.12.1.LTS/bin/cl430" -vmspx --data_model=restricted --use_hw_mpy=F5 --advice:power=all --advice:hw_config=all -g --define=__MSP430FR6989__ --diag_warning=225 --display_error_number --diag_wrap=off --silicon_errata=CPU21 --silicon_errata=CPU22 --silicon_errata=CPU40 --printf_support=minimal -z -m"6989LSM9DS0.map" --heap_size=160 --stack_size=160 --cinit_hold_wdt=on -i"C:/ti/ccsv6/ccs_base/msp430/include" -i"C:/ti/ccsv6/ccs_base/msp430/lib/5xx_6xx_FRxx" -i"C:/ti/ccsv6/ccs_base/msp430/lib/FR59xx" -i"C:/ti/ccsv6/tools/compiler/ti-cgt-msp430_15.12.1.LTS/lib" -i"C:/ti/ccsv6/tools/compiler/ti-cgt-msp430_15.12.1.LTS/include" --reread_libs --priority --display_error_number --warn_sections --diag_wrap=off --xml_link_info="6989LSM9DS0_linkInfo.xml" --use_hw_mpy=F5 --rom_model -o "6989LSM9DS0.out" $(ORDERED_OBJS)
 	@echo 'Finished building target: $@'
 	@echo ' '
 
 6989LSM9DS0.hex: $(EXE_OUTPUTS)
 	@echo 'Invoking: MSP430 Hex Utility'
-	"C:/ti/ccsv6/tools/compiler/ti-cgt-msp430_4.4.7/bin/hex430" --memwidth=8 --romwidth=8 -o "6989LSM9DS0.hex" $(EXE_OUTPUTS__QUOTED)
+	"C:/ti/ccsv6/tools/compiler/ti-cgt-msp430_15.12.1.LTS/bin/hex430" --memwidth=8 --romwidth=8 -o "6989LSM9DS0.hex" $(EXE_OUTPUTS__QUOTED)
 	@echo 'Finished building: $@'
 	@echo ' '
 
 # Other Targets
 clean:
 	-$(RM) $(EXE_OUTPUTS__QUOTED)$(BIN_OUTPUTS__QUOTED)
-	-$(RM) "main.pp" 
+	-$(RM) "main.d" 
 	-$(RM) "main.obj" 
 	-@echo 'Finished clean'
 	-@echo ' '
