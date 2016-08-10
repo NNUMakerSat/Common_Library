@@ -142,3 +142,4 @@ SPI_Master_Transmit/Debug/makefile
 *.launch
 *.xml
 6989LSM9DS0/Debug/makefile
+SPI_Master_Multiple/Debug/makefile
