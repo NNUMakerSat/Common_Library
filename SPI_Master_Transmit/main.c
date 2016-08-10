@@ -22,7 +22,7 @@ int main(void) {
 
     __enable_interrupt();                                // enable interrupts
 
-    TX_DATA = 0x02;
+    TX_DATA = 0x12;
 
     UCA0IE |= UCTXIE;                                    // enable TX interrupt
 
@@ -40,7 +40,7 @@ void Configure_SPI_Master_Registers(void)
 {
     UCA0CTLW0 |= UCSWRST;                                // enable eUSCI initialization of registers
 
-    // configure digital I/O Pins; select primary module function for P2.0, P2.1, and P2.2
+    // configure digital I/O Pins; select primary module function for P2.0 (MOSI), P2.1 (MISO), and P2.2 (SCK)
     P2SEL1 &= ~UCA0SIMO & ~UCA0SOMI & ~UCA0CLK;
     P2SEL0 |= UCA0SIMO | UCA0SOMI | UCA0CLK;
     P1SEL1 &= ~UCA0CLK;
