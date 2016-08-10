@@ -69,18 +69,16 @@ char read(void);
 
 int main(void) {
 	WDTCTL = WDTPW + WDTHOLD;                 			// Stop WDT
-
 	PM5CTL0 &= ~LOCKLPM5;
 
-//Set clock speed
-	CSCTL0_H = CSKEY >> 8;                    // Unlock CS registers
-	CSCTL1 = DCOFSEL_6;                       // Set DCO to 8MHz
-	CSCTL2 = SELA__VLOCLK | SELS__DCOCLK | SELM__DCOCLK; // Set SMCLK = MCLK = DCO
-	// ACLK = VLOCLK
-	CSCTL3 = DIVA__1 | DIVS__1 | DIVM__1;     // Set all dividers to 1
-	CSCTL0_H = 0;                             // Lock CS registers
-//Set clock speed
+////////////////////////Set clock speed///////////////////////////
+	CSCTL0_H = CSKEY >> 8;                    				// Unlock CS registers
+	CSCTL1 = DCOFSEL_6;                       				// Set DCO to 8MHz
+	CSCTL2 = SELA__VLOCLK | SELS__DCOCLK | SELM__DCOCLK; 	// Set SMCLK = MCLK = DC0 = ACLK = VLOCLK
+	CSCTL3 = DIVA__1 | DIVS__1 | DIVM__1;     				// Set all dividers to 1
+	CSCTL0_H = 0;                             				// Lock CS registers
 
+////////////////////////Set clock speed///////////////////////////
 	//P9DIR |= 0xE0;
 
 	rate_gyr_x = 0;
@@ -117,6 +115,7 @@ int main(void) {
 
 		outputRegister = OUT_Z_H_G;
 		zRate_H = read();
+
 		/////////////READ ACCELEROMETER/////////////////
 		UCB1I2CSA = XMAddress;
 
@@ -154,7 +153,11 @@ int main(void) {
 		g_x =( accRawx * A_GAIN)/thousand;
 		g_y =( accRawy * A_GAIN)/thousand;
 		g_z =( accRawz * A_GAIN)/thousand;
-		/////////////////////////////////////////////////////////////////////
+
+		/////////////SEND DATA THROUGH UART///////////////////////////
+		UCA0TXBUF = zaccel_H;
+		while(UCA0IFG == 0){};
+
 		/*sprintf(outString, "You took %d ms\n", g_x);
 		for(i = 0; outString[i] != 0x00; ++i) {
 		UCA1TXBUF = outString[i];
@@ -167,109 +170,109 @@ int main(void) {
 char read() {
 	uint8_t data;
 	data = 0;
-
 	while (UCB1CTL1 & UCTXSTP);               		// Ensure stop condition got sent
-	UCB1CTL1 |= UCTR + UCTXSTT;               	// I2C TX with start condition
+		UCB1CTL1 |= UCTR + UCTXSTT;               	// I2C TX with start condition
 	while ((UCB1CTL1 & UCTXSTT) || !(UCB1IFG & UCTXIFG0));
-	UCB1TXBUF = outputRegister;
+		UCB1TXBUF = outputRegister;
 	while (!(UCB1IFG & UCTXIFG0));
-	UCB1CTL1 &= ~UCTR;                     			// Clear I2C TX flag
-	UCB1CTL1 |= UCTXSTT;
-	while (UCB1CTL1 & UCTXSTT);                     			// I2C start condition
-	UCB1CTL1 |= UCTXSTP;
+		UCB1CTL1 &= ~UCTR;                     		// Clear I2C TX flag
+		UCB1CTL1 |= UCTXSTT;
+	while (UCB1CTL1 & UCTXSTT);                     // I2C start condition
+		UCB1CTL1 |= UCTXSTP;
 	while (!(UCB1IFG & UCRXIFG0));
-	data = UCB1RXBUF;
+		data = UCB1RXBUF;
 
 	return data;
 }
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 char write( registerAddress, setBits) {
 
-	while (UCB1CTL1 & UCTXSTP);               		// Ensure stop condition got sent
-	UCB1CTL1 |= UCTR + UCTXSTT;               	// I2C TX with start condition
+	while (UCB1CTL1 & UCTXSTP);               				// Ensure stop condition got sent
+		UCB1CTL1 |= UCTR + UCTXSTT;               			// I2C TX with start condition
 	while ((UCB1CTL1 & UCTXSTT) || !(UCB1IFG & UCTXIFG0));
-	UCB1TXBUF = registerAddress;
+		UCB1TXBUF = registerAddress;
 	while ((UCB1CTL1 & UCTXSTT) || !(UCB1IFG & UCTXIFG0));
-	UCB1TXBUF = setBits;                     			// Clear I2C TX flag
-	UCB1CTL1 |= UCTXSTP;
+		UCB1TXBUF = setBits;                     			// Clear I2C TX flag
+		UCB1CTL1 |= UCTXSTP;
+	return 0;
 }
 
 void initGyro(void) {
 	UCB1I2CSA = gyro_Address;                   	// Slave Address is 069h
 
-	while (UCB1CTL1 & UCTXSTP);               			// Ensure stop condition got sent
-	UCB1CTL1 |= UCTR + UCTXSTT;               	// I2C TX with start condition
+	while (UCB1CTL1 & UCTXSTP);               		// Ensure stop condition got sent
+		UCB1CTL1 |= UCTR + UCTXSTT;              	// I2C TX with start condition
 	while (UCB1CTL1 & UCTXSTT);
-	UCB1TXBUF = CTRL_REG1_G; // Low pass filter value register address to TXBuffer
+		UCB1TXBUF = CTRL_REG1_G; 					// Low pass filter value register address to TXBuffer
 	while ((UCB1IFG & UCTXIFG) == 0); 				//ADD CONDITION HERE TO CHECK FOR ACK
-	UCB1TXBUF = 0x0F;     							// config value to TXBuffer
+		UCB1TXBUF = 0x0F;     						// config value to TXBuffer
 	while ((UCB1IFG & UCTXIFG) == 0);
-	UCB1CTL1 |= UCTXSTP;                    		// I2C stop condition
-	UCB1IFG &= ~UCTXIFG;                     		// Clear USCI_B0 TX int flag
+		UCB1CTL1 |= UCTXSTP;                   		// I2C stop condition
+		UCB1IFG &= ~UCTXIFG;                   		// Clear USCI_B0 TX int flag
 
-	while (UCB1CTL1 & UCTXSTP);               			// Ensure stop condition got sent
-	UCB1CTL1 |= UCTR + UCTXSTT;               	// I2C TX with start condition
+	while (UCB1CTL1 & UCTXSTP);               		// Ensure stop condition got sent
+		UCB1CTL1 |= UCTR + UCTXSTT;               	// I2C TX with start condition
 	while (UCB1CTL1 & UCTXSTT);
-	UCB1TXBUF = CTRL_REG4_G;
+		UCB1TXBUF = CTRL_REG4_G;
 	while ((UCB1IFG & UCTXIFG) == 0);				// Sample Rate Divider value to TXBuffer
-	UCB1TXBUF = 0x30; 								// config value to TXBuffer
+		UCB1TXBUF = 0x30; 							// config value to TXBuffer
 	while ((UCB1IFG & UCTXIFG) == 0);
-	UCB1CTL1 |= UCTXSTP;                    		// I2C stop condition
-	UCB1IFG &= ~UCTXIFG;                     		// Clear USCI_B0 TX int flag
+		UCB1CTL1 |= UCTXSTP;                    	// I2C stop condition
+		UCB1IFG &= ~UCTXIFG;                     	// Clear USCI_B0 TX int flag
 }
 
 void initXM(void) {
 	UCB1I2CSA = XMAddress;                   		// Slave Address is 069h
 
-	while (UCB1CTL1 & UCTXSTP);               			// Ensure stop condition got sent
-	UCB1CTL1 |= UCTR + UCTXSTT;               	// I2C TX with start condition
+	while (UCB1CTL1 & UCTXSTP);               		// Ensure stop condition got sent
+		UCB1CTL1 |= UCTR + UCTXSTT;             	// I2C TX with start condition
 	while (UCB1CTL1 & UCTXSTT);
-	UCB1TXBUF = CTRL_REG1_XM; // Low pass filter value register address to TXBuffer
+		UCB1TXBUF = CTRL_REG1_XM; 					// Low pass filter value register address to TXBuffer
 	while ((UCB1IFG & UCTXIFG) == 0); 				//ADD CONDITION HERE TO CHECK FOR ACK
-	UCB1TXBUF = 0x67;     							// config value to TXBuffer
+		UCB1TXBUF = 0x67;     						// config value to TXBuffer
 	while ((UCB1IFG & UCTXIFG) == 0);
-	UCB1CTL1 |= UCTXSTP;                    		// I2C stop condition
-	UCB1IFG &= ~UCTXIFG;                     		// Clear USCI_B0 TX int flag
+		UCB1CTL1 |= UCTXSTP;                    	// I2C stop condition
+		UCB1IFG &= ~UCTXIFG;                    	// Clear USCI_B0 TX int flag
 
-	while (UCB1CTL1 & UCTXSTP);               			// Ensure stop condition got sent
-	UCB1CTL1 |= UCTR + UCTXSTT;               	// I2C TX with start condition
+	while (UCB1CTL1 & UCTXSTP);               		// Ensure stop condition got sent
+		UCB1CTL1 |= UCTR + UCTXSTT;               	// I2C TX with start condition
 	while (UCB1CTL1 & UCTXSTT);
-	UCB1TXBUF = CTRL_REG2_XM;			// Sample Rate Divider value to TXBuffer
+		UCB1TXBUF = CTRL_REG2_XM;					// Sample Rate Divider value to TXBuffer
 	while ((UCB1IFG & UCTXIFG) == 0);
-	UCB1TXBUF = 0x20; 								// config value to TXBuffer
+		UCB1TXBUF = 0x20; 							// config value to TXBuffer
 	while ((UCB1IFG & UCTXIFG) == 0);
-	UCB1CTL1 |= UCTXSTP;                    		// I2C stop condition
-	UCB1IFG &= ~UCTXIFG;                     		// Clear USCI_B0 TX int flag
+		UCB1CTL1 |= UCTXSTP;                    	// I2C stop condition
+		UCB1IFG &= ~UCTXIFG;                     	// Clear USCI_B0 TX int flag
 
-	while (UCB1CTL1 & UCTXSTP);               			// Ensure stop condition got sent
-	UCB1CTL1 |= UCTR + UCTXSTT;               	// I2C TX with start condition
+	while (UCB1CTL1 & UCTXSTP);               		// Ensure stop condition got sent
+		UCB1CTL1 |= UCTR + UCTXSTT;            		// I2C TX with start condition
 	while (UCB1CTL1 & UCTXSTT);
-	UCB1TXBUF = CTRL_REG5_XM;			// Sample Rate Divider value to TXBuffer
+		UCB1TXBUF = CTRL_REG5_XM;					// Sample Rate Divider value to TXBuffer
 	while ((UCB1IFG & UCTXIFG) == 0);
-	UCB1TXBUF = 0xF0; 								// config value to TXBuffer
+		UCB1TXBUF = 0xF0; 							// config value to TXBuffer
 	while ((UCB1IFG & UCTXIFG) == 0);
-	UCB1CTL1 |= UCTXSTP;                    		// I2C stop condition
-	UCB1IFG &= ~UCTXIFG;                     		// Clear USCI_B0 TX int flag
+		UCB1CTL1 |= UCTXSTP;                    	// I2C stop condition
+		UCB1IFG &= ~UCTXIFG;                    	// Clear USCI_B0 TX int flag
 
-	while (UCB1CTL1 & UCTXSTP);               			// Ensure stop condition got sent
-	UCB1CTL1 |= UCTR + UCTXSTT;               	// I2C TX with start condition
+	while (UCB1CTL1 & UCTXSTP);               		// Ensure stop condition got sent
+		UCB1CTL1 |= UCTR + UCTXSTT;               	// I2C TX with start condition
 	while (UCB1CTL1 & UCTXSTT);
-	UCB1TXBUF = CTRL_REG6_XM;			// Sample Rate Divider value to TXBuffer
+		UCB1TXBUF = CTRL_REG6_XM;					// Sample Rate Divider value to TXBuffer
 	while ((UCB1IFG & UCTXIFG) == 0);
-	UCB1TXBUF = 0x60; 								// config value to TXBuffer
+		UCB1TXBUF = 0x60; 							// config value to TXBuffer
 	while ((UCB1IFG & UCTXIFG) == 0);
-	UCB1CTL1 |= UCTXSTP;                    		// I2C stop condition
-	UCB1IFG &= ~UCTXIFG;                     		// Clear USCI_B0 TX int flag
+		UCB1CTL1 |= UCTXSTP;                    	// I2C stop condition
+		UCB1IFG &= ~UCTXIFG;                     	// Clear USCI_B0 TX int flag
 
-	while (UCB1CTL1 & UCTXSTP);               			// Ensure stop condition got sent
-	UCB1CTL1 |= UCTR + UCTXSTT;               	// I2C TX with start condition
+	while (UCB1CTL1 & UCTXSTP);               		// Ensure stop condition got sent
+		UCB1CTL1 |= UCTR + UCTXSTT;               	// I2C TX with start condition
 	while (UCB1CTL1 & UCTXSTT);
-	UCB1TXBUF = CTRL_REG7_XM;			// Sample Rate Divider value to TXBuffer
+		UCB1TXBUF = CTRL_REG7_XM;					// Sample Rate Divider value to TXBuffer
 	while ((UCB1IFG & UCTXIFG) == 0);
-	UCB1TXBUF = 0x00; 								// config value to TXBuffer
+		UCB1TXBUF = 0x00; 							// config value to TXBuffer
 	while ((UCB1IFG & UCTXIFG) == 0);
-	UCB1CTL1 |= UCTXSTP;                    		// I2C stop condition
-	UCB1IFG &= ~UCTXIFG;                     		// Clear USCI_B0 TX int flag
+		UCB1CTL1 |= UCTXSTP;                    	// I2C stop condition
+		UCB1IFG &= ~UCTXIFG;                     	// Clear USCI_B0 TX int flag
 }
 
 void init_I2C(void) {
@@ -286,6 +289,7 @@ void initUart(void) {
 	P2SEL1 &= ~(BIT0 + BIT1);							//Initialize Port 2 pins 0 and 1 to UART mode
 	UCA0CTL1 |= UCSWRST;								// Enable SW reset
 	UCA0CTL1 |= UCSSEL_2;                     			// Use SMCLK
-	UCA0BRW = 104;
+//	UCA0BRW = 104;
+	UCA0BRW =13;
 	UCA0CTL1 &= ~UCSWRST;
 }
