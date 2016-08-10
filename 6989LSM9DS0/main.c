@@ -21,8 +21,8 @@
 #include <stdint.h>
 #include "LSM9DS0.h"
 
-#define G_GAIN	0.07		//[deg/s/LSB]
-#define A_GAIN	0.732		//[mg/LSB]
+#define G_GAIN		0.07		//[deg/s/LSB]
+#define A_GAIN		0.732		//[mg/LSB]
 #define thousand	1000		//[mg/LSB]
 
 char xRate_L;  // Variable to hold X_Low register value
