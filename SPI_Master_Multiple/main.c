@@ -1,13 +1,14 @@
 //Single char write written by Connor
 
 #include <msp430.h> 
+#include <stdint.h> //needed for uint
 
 // define the SPI pins
 #define UCA0SIMO 0x01
 #define UCA0SOMI 0x02
 #define UCA0CLK 0x04
 
-char TX_DATA;
+uint8_t TX_DATA;
 
 void Configure_SPI_Master_Registers(void);
 
@@ -21,7 +22,7 @@ int main(void) {
 
     __enable_interrupt();                                // enable interrupts
 
-    TX_DATA = 0x12;
+    TX_DATA = 0x3F;
 
     UCA0IE |= UCTXIE;                                    // enable TX interrupt
 
