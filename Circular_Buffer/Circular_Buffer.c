@@ -4,23 +4,26 @@
  *  Created on: Aug 10, 2016
  *      Author: Dr. Griffin
  */
-
+#include <msp430fr6989.h>
+#include <stdio.h>
+#include <stdint.h>
+#include <stdbool.h>
 #include "Circular_Buffer.h"
 
-#define MAXBUFFERSIZE 500
+#define MAXBUFFERSIZE 5
 
-uint8_t g_buffer[MAXBUFFERSIZE];
+uint16_t g_buffer[MAXBUFFERSIZE];
 
-int8_t g_begin = 0;
-int8_t g_end = MAXBUFFERSIZE-1;
-int8_t g_top;
-int8_t g_bottom;
+int16_t g_begin = 0;
+int16_t g_end = MAXBUFFERSIZE-1;
+int16_t g_top;
+int16_t g_bottom;
 bool g_bufferEmpty;
 bool g_bufferFull;
 
 void initBuffer(void){
-    int8_t g_top = 0;
-    int8_t g_bottom = 0;
+    g_top = 0;
+    g_bottom = 0;
     g_bufferFull = false;
     g_bufferEmpty = false;
 }

@@ -143,3 +143,4 @@ SPI_Master_Transmit/Debug/makefile
 *.xml
 SPI_Master_Multiple/Debug/makefile
 6989LSM9DS0/Debug/makefile
+Circular_Buffer/Debug/makefile
