@@ -10,7 +10,7 @@
 #include <stdbool.h>
 #include "Circular_Buffer.h"
 
-#define MAXBUFFERSIZE 5
+#define MAXBUFFERSIZE 500
 
 uint16_t g_buffer[MAXBUFFERSIZE];
 
@@ -21,14 +21,14 @@ int16_t g_bottom;
 bool g_bufferEmpty;
 bool g_bufferFull;
 
-void initBuffer(void){
+void init_Buffer(void){
     g_top = 0;
     g_bottom = 0;
     g_bufferFull = false;
     g_bufferEmpty = false;
 }
 
-void writeBuffer(uint8_t data) {
+void write_Buffer(uint8_t data) {
     g_buffer[g_bottom] = data;
     g_bottom++;
     if(g_bottom > g_end) {
@@ -41,7 +41,7 @@ void writeBuffer(uint8_t data) {
     }
 }
 
-uint8_t readBuffer(void) {
+uint8_t read_Buffer(void) {
     uint8_t readVal = g_buffer[g_top];
     g_top++;
     if(g_top > g_end) {
@@ -55,10 +55,10 @@ uint8_t readBuffer(void) {
     return readVal;
 }
 
-bool isBufferFull(void) {
+bool is_Buffer_Full(void) {
     return g_bufferFull;
 }
 
-bool isBufferEmpty(void) {
+bool is_Buffer_Empty(void) {
     return g_bufferEmpty;
 }

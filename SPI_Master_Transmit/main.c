@@ -1,40 +1,35 @@
-#include <msp430.h> 
+#include <msp430.h>
+#include <stdint.h>
 
 // define the SPI pins
 #define UCA0SIMO 0x01
 #define UCA0SOMI 0x02
 #define UCA0CLK 0x04
 
-char TX_DATA;
+uint8_t input_Data[5] = {2, 3, 4, 5, 6};
+//uint16_t g_counter = 0;
+uint16_t g_counter = 1;
 
 void Configure_SPI_Master_Registers(void);
 
-
-/*
- * main.c
- */
+// main.c
 int main(void) {
     WDTCTL = WDTPW | WDTHOLD;	                         // Stop watchdog timer
-	
-    PM5CTL0 &= ~LOCKLPM5;                                // disable high impedence mode
+	PM5CTL0 &= ~LOCKLPM5;                                // disable high impedence mode
 
     Configure_SPI_Master_Registers();
 
     __enable_interrupt();                                // enable interrupts
 
-    TX_DATA = 0x12;
-
     UCA0IE |= UCTXIE;                                    // enable TX interrupt
 
-    UCA0TXBUF = TX_DATA;                                 // put data in TX buffer
+    UCA0TXBUF = input_Data[0];                   // put data in TX buffer
 
-    while(1)
-    {
-
+    while(UCA0TXBUF != 0) {
     }
 
+    return 0;											// ends function
 }
-
 
 void Configure_SPI_Master_Registers(void)
 {
@@ -62,7 +57,9 @@ void Configure_SPI_Master_Registers(void)
 }
 
 #pragma vector = USCI_A0_VECTOR
-__interrupt void USCI_A0_ISR(void)
-{
-    UCA0TXBUF = TX_DATA;                                // put data in TX buffer
+__interrupt void USCI_A0_ISR(void) {						// interrupt is when it goes from TX buffer to TX register and buffer becomes null
+	if (g_counter <= 5) {
+		UCA0TXBUF = input_Data[g_counter];                    // put data in TX buffer
+		++g_counter;
+	}
 }

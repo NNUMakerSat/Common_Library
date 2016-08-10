@@ -12,10 +12,10 @@
 #ifndef CIRCULAR_BUFFER_H_
 #define CIRCULAR_BUFFER_H_
 
-void initBuffer(void);
-void writeBuffer(uint8_t data);
-uint8_t readBuffer(void);
-bool isBufferFull(void);
-bool isBufferEmpty(void);
+void init_Buffer(void);
+void write_Buffer(uint8_t data);
+uint8_t read_Buffer(void);
+bool is_Buffer_Full(void);
+bool is_Buffer_Empty(void);
 
 #endif /* CIRCULAR_BUFFER_H_ */

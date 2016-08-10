@@ -13,16 +13,16 @@ int main(void) {
     uint8_t data;
     data = 52;					// since value is ASCII it will apepar as its ASCII value (ie 52 = "4")
 	
-    initBuffer();
+    init_Buffer();
 
     while(data != 62) {
 
-        if(!isBufferFull()){
-            writeBuffer(data);
+        if(!is_Buffer_Full()){
+            write_Buffer(data);
         }
 
-        if(!isBufferEmpty()){
-            data = readBuffer();
+        if(!is_Buffer_Empty()){
+            data = read_Buffer();
         }
         ++data;
     }
