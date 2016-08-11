@@ -5,6 +5,8 @@
  *      Author: aaronewing
  */
 
+// contains all functions for Initializing MSP430
+
 #ifndef INITIALIZE_H_
 #define INITIALIZE_H_
 
