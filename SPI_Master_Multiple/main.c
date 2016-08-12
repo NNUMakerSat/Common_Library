@@ -4,9 +4,10 @@
 #include <stdint.h> //needed for uint
 
 // define the SPI pins
-#define UCA0SIMO 0x01
-#define UCA0SOMI 0x02
-#define UCA0CLK 0x04
+#define UCA0SIMO 0x01 		// pin 0
+#define UCA0SOMI 0x02		// pin 1
+#define UCA0CLK 0x04		// pin 2
+#define UCA0STE 0x08		// pin 3
 
 uint8_t TX_DATA;
 

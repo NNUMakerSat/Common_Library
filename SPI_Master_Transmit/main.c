@@ -6,7 +6,7 @@
 #define UCA0SOMI 0x02
 #define UCA0CLK 0x04
 
-uint8_t input_Data[5] = {2, 3, 4, 5, 6};
+unsigned int input_Data[5] = {2000, 3, 4, 5, 6};
 //uint16_t g_counter = 0;
 uint16_t g_counter = 1;
 
@@ -58,8 +58,9 @@ void Configure_SPI_Master_Registers(void)
 
 #pragma vector = USCI_A0_VECTOR
 __interrupt void USCI_A0_ISR(void) {						// interrupt is when it goes from TX buffer to TX register and buffer becomes null
-	if (g_counter <= 5) {
+	/*if (g_counter <= 5) {
 		UCA0TXBUF = input_Data[g_counter];                    // put data in TX buffer
 		++g_counter;
-	}
+	} */
+	UCA0TXBUF = input_Data[0];
 }
