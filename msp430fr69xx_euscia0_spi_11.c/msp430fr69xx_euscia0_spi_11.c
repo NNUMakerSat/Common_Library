@@ -86,8 +86,10 @@ int main(void)
   P2SEL0 |= BIT0 | BIT1;                    // Configure SOMI and MISO
   PJSEL0 |= BIT4 | BIT5;                    // For XT1
 
-  P1DIR |= BIT1;                   // Clear P1.0 output latch for a defined power-on state
-  P1OUT &= ~BIT1;                         // Set P1.1 to input direction
+  P1DIR &= ~BIT1;                   // Clear P1.0 output latch for a defined power-on state
+  P1OUT |= BIT1;                         // Set P1.1 to input direction
+  P1REN |= BIT1;
+
 
   // Disable the GPIO power-on default high-impedance mode to activate
   // previously configured port settings
@@ -123,10 +125,10 @@ int main(void)
   while(1)
   {
     UCA0IE |= UCTXIE;
-    __bis_SR_register(LPM0_bits | GIE);     // Enter LPM0, enable interrupt
-    __no_operation();                       // Remain in LPM0
-    __delay_cycles(200);                   // Delay before next transmission
-    if (P1OUT == BIT1) {                    // button for slave ID
+//    __bis_SR_register(LPM0_bits | GIE);     // Enter LPM0, enable interrupt
+ //   __no_operation();                       // Remain in LPM0
+    __delay_cycles(20);                   // Delay before next transmission
+    if (P1OUT |= BIT1) {                    // button for slave ID
     	TXData = 0x1;
     } else {
     	TXData = 0x0;
