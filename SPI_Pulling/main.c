@@ -16,21 +16,24 @@ uint16_t tx_Data_16;
 int main(void) {
 	WDTCTL = WDTPW | WDTHOLD;                 	// Stop watchdog timer
 
-	void initialize_Clocks (void);				// Sets up timers (takes care of FRAM issue)
-	void initialize_Ports(void);				// Init all non used ports
+	initialize_Clocks ();				// Sets up timers (takes care of FRAM issue)
+	initialize_Ports();				// Init all non used ports
 
-	void init_SPI (uint8_t clk_Rate, uint8_t pin_Setting);		// clk_Rate -> 8 = 8MHz, 4 = 4MHz, 2 = 2.67MHz, 1 = 1MHz
+	uint8_t clk_Rate = 1;
+	uint8_t pin_Setting = 0;
+
+	init_SPI (clk_Rate, pin_Setting);		// clk_Rate -> 8 = 8MHz, 4 = 4MHz, 2 = 2.67MHz, 1 = 1MHz
 													// pin_Setting -> 0 =>  P1.5 - UCA0CLK, P1.6 - SYNC, P2.0 - SIMO, P2.1 - SOMI
 
 
-	void write_uint16_SPI (uint16_t tx_Data_16);
+	write_uint16_SPI (tx_Data_16);
 
     while(1) {
     //	P1OUT |= BIT6; 								// set sync line high to start
     //	while (!(UCA0IFG & UCTXIFG)){};				// If able to TX
 
     	tx_Data_16 = (dac_Val & DAC_PD_NORMAL);		// Data to transmit (both value and control bits)
-    	write_uint16_SPI (uint16_t tx_Data_16);
+    	write_uint16_SPI (tx_Data_16);
     	++dac_Val;
     }
 

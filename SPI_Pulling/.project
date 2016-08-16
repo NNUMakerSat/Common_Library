@@ -24,16 +24,4 @@
 		<nature>org.eclipse.cdt.core.ccnature</nature>
 		<nature>org.eclipse.cdt.managedbuilder.core.ScannerConfigNature</nature>
 	</natures>
-	<linkedResources>
-		<link>
-			<name>Initialize.c</name>
-			<type>1</type>
-			<locationURI>PARENT-1-PROJECT_LOC/Initialize/Initialize.c</locationURI>
-		</link>
-		<link>
-			<name>Initialize.h</name>
-			<type>1</type>
-			<locationURI>PARENT-1-PROJECT_LOC/Initialize/Initialize.h</locationURI>
-		</link>
-	</linkedResources>
 </projectDescription>

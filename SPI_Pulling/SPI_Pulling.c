@@ -42,7 +42,7 @@ void init_SPI (uint8_t clk_Rate, uint8_t pin_Setting) {
 	 case 8:
 	 	 CSCTL1 = DCOFSEL_7;				// Set DCO to 8MHz
 	 	 break;
-	 default
+	 default:
 	 	 CSCTL1 = DCOFSEL_0;				// Set DCO to 1MHz
 	 }
 
