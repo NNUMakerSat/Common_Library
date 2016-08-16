@@ -15,46 +15,66 @@
 *  P2.1 - SOMI
 */
 
-void init_SPI (void) {
+void init_SPI (uint8_t clk_Rate, uint8_t pin_Setting) {
 	// Configure Primary Function Pins
 	P1SEL1 |= BIT5;                           // USCI_A0 operation (P1.5)
 	P2SEL0 |= BIT0 | BIT1;                    // USCI_A0 operation (P2.0 & P2.1)
-	PJSEL0 |= BIT4 | BIT5;                    // For XT1
 
 	// configure P1.6 (SYNC) as GPIO used to enable SPI write to DAC
 	P1SEL0 &= ~BIT6;
 	P1SEL1 &= ~BIT6;
 	P1DIR |= BIT6;
+	P1OUT |= BIT6; 								// set sync line high to start
 
 	 // XT1 Setup
 	 CSCTL0_H = CSKEY >> 8;                    // Unlock CS registers
-	 CSCTL1 = DCOFSEL_0;                       // Set DCO to 1MHz
-	 CSCTL2 = SELA__LFXTCLK | SELS__DCOCLK | SELM__DCOCLK;
-	 CSCTL3 = DIVA__1 | DIVS__1 | DIVM__1;     		// set all dividers
-	 CSCTL4 &= ~LFXTOFF;
-	 do {
-		 CSCTL5 &= ~LFXTOFFG;                  		// Clear XT1 fault flag
-	     SFRIFG1 &= ~OFIFG;
-	 } while (SFRIFG1&OFIFG);                 	  	// Test oscillator fault flag
-	 	 CSCTL0_H = 0;                             	// Lock CS registers
+
+	 switch (clk_Rate) {
+	 case 1:
+		 CSCTL1 = DCOFSEL_0;				// Set DCO to 1MHz
+		 break;
+	 case 2:
+		 CSCTL1 = DCOFSEL_1;				// Set DCO to 2.67MHz
+	 	break;
+	 case 4:
+		 CSCTL1 = DCOFSEL_3;				// Set DCO to 4MHz
+	 	 break;
+	 case 8:
+	 	 CSCTL1 = DCOFSEL_7;				// Set DCO to 8MHz
+	 	 break;
+	 default
+	 	 CSCTL1 = DCOFSEL_0;				// Set DCO to 1MHz
+	 }
+
+	CSCTL2 = SELA__LFXTCLK | SELS__DCOCLK | SELM__DCOCLK;
+ 	CSCTL0_H = 0;                             	// Lock CS registers
 
 	 // Configure USCI_A0 for SPI operation
 	 UCA0CTLW0 = UCSWRST;                      		// **Put state machine in reset**
 
 	 UCA0CTLW0 |= UCMST | UCSYNC | UCMSB | UCCKPL;	// 3-pin, 8-bit SPI master
 	                                          	  	    // Clock polarity high, MSB
-	 UCA0CTLW0 |= UCSSEL__SMCLK;              	 	// ACLK
-	 UCA0BR0 = 0x02;                           		// /2
+	 UCA0CTLW0 |= UCSSEL__SMCLK;              	 	// SMCLK
+	 UCA0BR0 = 0x02;                           		// /2  <<look if problems>>
 	 UCA0BR1 = 0;                             	 	//
 	 UCA0MCTLW = 0;                           	 	// No modulation
 	 UCA0CTLW0 &= ~UCSWRST;                   	 	// **Initialize USCI state machine**
 }
 
+void write_uint16_SPI (uint16_t tx_Data_16) {
+	while (!(UCA0IFG & UCTXIFG)){};					// If able to TX
+
+	P1OUT &= ~BIT6;									// Pulls SYNC low
+	while (!(UCA0IFG & UCTXIFG)) {};    			// While TXing
+	UCA0TXBUF = (tx_Data_16 >> 8);					// First 8 bits transmitted (Control bits and data)
+	while (!(UCA0IFG & UCTXIFG)) {};
+	UCA0TXBUF = tx_Data_16;							// Last 8 bits transmitted (overflow expected and is fine)
+	while (UCA0STATW & UCBUSY) {};
+	P1OUT |= BIT6;									// Pulls SYNC high when not busy
+}
 
 
-
-
-/* XT1 section:
+/* XT1 & SPI config section:
  *
  *
  * --COPYRIGHT--,BSD_EX

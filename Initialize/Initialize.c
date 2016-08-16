@@ -10,15 +10,28 @@
 #include "Initialize.h"
 
 void initialize_Clocks(void) {								// Sets all clocks to standard position
-	CSCTL0_H = CSKEY_H;									// Unlocks clock system register (CSKEY) (allows for change in clock)
+	P7DIR |= BIT4;
+	P7SEL1 |= BIT4;             // Output SMCLK
+	P7SEL0 |= BIT4;
 
-	CSCTL1 = DCORSEL | DCOFSEL_3;							// Set DCOCLK to 8 MHz (option to go to 24 MHz but FRAM doesn't like above 8MHz)
+	PJSEL0 |= BIT4 | BIT5;      // For XT1
 
-	CSCTL2 = SELA__VLOCLK | SELS__DCOCLK | SELM__DCOCLK; 	// Set ACLK to 10kHz (Very Low Power), SMCLK = MCLK = 8 Mhz
-																// set ACLK to LFXT if 30+ kHz is required
-	CSCTL3 = DIVM__1 | DIVS__1 | DIVA__1; 			 		// Make sure there are no CLK dividers
+	// Disable the GPIO power-on default high-impedance mode to activate
+	// previously configured port settings
+	PM5CTL0 &= ~LOCKLPM5;
 
-	CSCTL0_H = 0;											// Locks clock system register (CSKEY) (allows for change in clock)
+	CSCTL0_H = CSKEY >> 8;                    // Unlock CS registers (allows for change in clock)
+	CSCTL1 = DCOFSEL_6;                       // Set DCO to 8MHz (option to go to 16 MHz but FRAM doesn't like above 8MHz)
+	CSCTL2 = SELA__LFXTCLK | SELS__HFXTCLK | SELM__DCOCLK;
+	CSCTL3 = DIVA__1 | DIVS__1 | DIVM__1;     // Set all dividers to 1 (all CLKS at highest frequency)
+	CSCTL4 |= LFXTDRIVE_3 | HFXTDRIVE_3;
+	CSCTL4 &= ~(LFXTOFF | HFXTOFF);
+	do
+	{
+		CSCTL5 &= ~LFXTOFFG;       	// Clear XT1 fault flag
+	    SFRIFG1 &= ~OFIFG;
+	}while (SFRIFG1&OFIFG);                 	  // Test oscillator fault flag
+		CSCTL0_H = 0;                             // Lock CS registers (does not allow change in clock)
 }
 
 void initialize_Ports(void){			// sets all pins on all ports as an output (except Port 10)
