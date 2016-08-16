@@ -1,5 +1,6 @@
 #include <msp430.h> 
 #include <stdint.h>
+#include "SPI_Pulling.h"
 
 /* P1.5 - UCA0CLK
 *  P1.6 - SYNC
@@ -18,7 +19,7 @@ uint16_t RXData;
 int main(void) {
 	WDTCTL = WDTPW | WDTHOLD;                 // Stop watchdog timer
 
-	// Configure GPIO
+	// Configure Primary Function Pins
     P1SEL1 |= BIT5;                           // USCI_A0 operation (P1.5)
     P2SEL0 |= BIT0 | BIT1;                    // USCI_A0 operation (P2.0 & P2.1)
     PJSEL0 |= BIT4 | BIT5;                    // For XT1
