@@ -10,9 +10,9 @@
 #ifndef SPI_PULLING_H_
 #define SPI_PULLING_H_
 
-void init_SPI (uint8_t clk_Rate, uint8_t pin_Setting);		// pin select.
-void write_uint8_SPI (uint8_t tx_Data_8);
-void write_uint16_SPI (uint16_t tx_Data_16);
-uint8_t read_SPI (void);
+void init_SPI (uint8_t clk_Rate, uint8_t pin_Setting);				// initalizes SPI clk rate and which pins are being used
+void write_uint8_SPI (uint8_t tx_Data_8, uint8_t device_CS);		// writes 8 bits with SPI
+void write_uint16_SPI (uint16_t tx_Data_16, uint8_t device_CS);		// writes 16 bits with SPI
+uint8_t read_SPI (void);											// reads with SPI
 
 #endif /* SPI_PULLING_H_ */
