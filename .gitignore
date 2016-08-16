@@ -145,3 +145,4 @@ SPI_Master_Transmit/Debug/makefile
 SPI_Master_Multiple/Debug/makefile
 Circular_Buffer/Debug/makefile
 Initialize/Debug/makefile
+SPI_Polling/Debug/makefile
