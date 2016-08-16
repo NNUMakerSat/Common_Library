@@ -18,7 +18,8 @@ uint16_t RXData;
 // main.c
 int main(void) {
 	WDTCTL = WDTPW | WDTHOLD;                 // Stop watchdog timer
-
+	void init_SPI (void);
+/*
 	// Configure Primary Function Pins
     P1SEL1 |= BIT5;                           // USCI_A0 operation (P1.5)
     P2SEL0 |= BIT0 | BIT1;                    // USCI_A0 operation (P2.0 & P2.1)
@@ -28,11 +29,11 @@ int main(void) {
     P1SEL0 &= ~BIT6;
     P1SEL1 &= ~BIT6;
     P1DIR |= BIT6;
-
+*/
     // Disable the GPIO power-on default high-impedance mode to activate
     // previously configured port settings
     PM5CTL0 &= ~LOCKLPM5;
-
+/*
     // XT1 Setup
     CSCTL0_H = CSKEY >> 8;                    // Unlock CS registers
     CSCTL1 = DCOFSEL_0;                       // Set DCO to 1MHz
@@ -55,6 +56,10 @@ int main(void) {
     UCA0BR1 = 0;                             	 	//
     UCA0MCTLW = 0;                           	 	// No modulation
     UCA0CTLW0 &= ~UCSWRST;                   	 	// **Initialize USCI state machine**
+*/
+
+
+
 
     while(1) {
     	P1OUT |= BIT6; 								// set sync line high to start
