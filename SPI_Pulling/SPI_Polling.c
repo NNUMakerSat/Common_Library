@@ -9,22 +9,64 @@
 #include <msp430.h>
 #include <stdint.h>
 
-/* P1.5 - UCA0CLK
-*  P1.6 - SYNC
-*  P2.0 - SIMO
-*  P2.1 - SOMI
-*/
-
 void init_SPI (uint8_t clk_Rate, uint8_t pin_Setting) {
-	// Configure Primary Function Pins
-	P1SEL1 |= BIT5;                           // USCI_A0 operation (P1.5)
-	P2SEL0 |= BIT0 | BIT1;                    // USCI_A0 operation (P2.0 & P2.1)
+	switch (pin_Setting) {
+		 case 1:
+			 // Configure Primary Function Pins
+			 P1SEL0 |= BIT4 | BIT6 | BIT7;       		// P1.4 - CLK, P1.6 - SIMO, P1.7 - SOMI
 
-	// configure P1.6 (SYNC) as GPIO used to enable SPI write to DAC
-	P1SEL0 &= ~BIT6;
-	P1SEL1 &= ~BIT6;
-	P1DIR |= BIT6;
-	P1OUT |= BIT6; 								// set sync line high to start
+			 // configure as GPIO used to enable SPI write to DAC
+			 P1SEL0 &= ~BIT5;
+			 P1SEL1 &= ~BIT5;							// P1.5 - SYNC/Slave Select
+			 P1DIR |= BIT5;
+			 P1OUT |= BIT5;
+			 break;
+
+		 case 2:
+			 // Configure Primary Function Pins
+			 P2SEL0 |= BIT0 | BIT1 | BIT2;              // P2.0 - SIMO, P2.1 - SOMI, P2.2 - CLK
+
+			 // configure as GPIO used to enable SPI write to DAC
+			 P2SEL0 &= ~BIT3;
+			 P2SEL1 &= ~BIT3;							// P2.3 - SYNC/Slave Select
+			 P1DIR |= BIT3;
+			 P1OUT |= BIT3;
+			 break;
+
+		 case 3:
+			 // Configure Primary Function Pins
+			 P3SEL0 |= BIT0 | BIT1 | BIT2;              // P3.0 - CLK, P3.1 - SIMO, P.2 - SOMI
+
+			 // configure as GPIO used to enable SPI write to DAC
+			 P1SEL0 &= ~BIT6;
+			 P1SEL1 &= ~BIT6;							// P1.6 - SYNC/Slave Select (no 'natural' pin)
+			 P1DIR |= BIT6;
+			 P1OUT |= BIT6;
+			 break;
+
+		 case 4:
+			 // Configure Primary Function Pins
+			 P3SEL0 |= BIT4 | BIT5 | BIT6;              // P3.4 - SIMO, P3.5 - SOMI, P3.6 - CLK
+
+			 // configure as GPIO used to enable SPI write to DAC
+			 P1SEL0 &= ~BIT6;
+			 P1SEL1 &= ~BIT6;							// P3.7 - SYNC/Slave Select
+			 P1DIR |= BIT6;
+			 P1OUT |= BIT6;
+			 break;
+
+		 default:
+			 // Configure Primary Function Pins
+			 P1SEL1 |= BIT5;                          	// P1.5 - CLK
+			 P2SEL0 |= BIT0 | BIT1;                   	// P2.0 - SIMO, P2.1 - SOMI
+
+			 // configure as GPIO used to enable SPI write to DAC
+			 P1SEL0 &= ~BIT6;
+			 P1SEL1 &= ~BIT6;							// P1.6 - SYNC/Slave Select
+			 P1DIR |= BIT6;
+			 P1OUT |= BIT6;
+			 break;
+		 }
 
 	 // XT1 Setup
 	 CSCTL0_H = CSKEY >> 8;                    // Unlock CS registers
@@ -177,7 +219,7 @@ void write_uint16_SPI (uint16_t tx_Data_16, uint8_t device_CS) {
 }
 
 
-/* XT1 & SPI config section:
+/* XT1 config section:
  *
  *
  * --COPYRIGHT--,BSD_EX
@@ -211,4 +253,16 @@ void write_uint16_SPI (uint16_t tx_Data_16, uint8_t device_CS) {
  * OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
  * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *
- *******************************************************************************/
+ *******************************************************************************
+ *                       MSP430 CODE EXAMPLE DISCLAIMER
+ *
+ * MSP430 code examples are self-contained low-level programs that typically
+ * demonstrate a single peripheral function or device feature in a highly
+ * concise manner. For this the code may rely on the device's power-on default
+ * register values and settings such as the clock configuration and care must
+ * be taken when combining code from several examples to avoid potential side
+ * effects. Also see www.ti.com/grace for a GUI- and www.ti.com/msp430ware
+ * for an API functional library-approach to peripheral configuration.
+ *
+ * --/COPYRIGHT--*/
+//******************************************************************************
