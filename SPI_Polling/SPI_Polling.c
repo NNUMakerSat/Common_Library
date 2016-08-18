@@ -5,10 +5,12 @@
  *      Author: aaronewing
  */
 
-
 #include <msp430.h>
 #include <stdint.h>
 
+uint8_t g_RXData;
+
+////////////////////// SPI INIT /////////////////////////////////////
 void init_SPI (uint8_t clk_Rate, uint8_t pin_Setting) {
 	switch (pin_Setting) {
 		 case 1:
@@ -103,18 +105,113 @@ void init_SPI (uint8_t clk_Rate, uint8_t pin_Setting) {
 	 UCA0CTLW0 &= ~UCSWRST;                   	 	// **Initialize USCI state machine**
 }
 
+////////////////////// SPI WRITE 8 BIT /////////////////////////////////////
+void write_uint8_SPI (uint8_t tx_Data_8, uint8_t device_CS) {
+	while (!(UCA0IFG & UCTXIFG)){};							// If able to TX
+
+	switch (device_CS) {
+		case 1:
+			P1OUT &= ~BIT4;									// Pulls SYNC low
+			while (!(UCA0IFG & UCTXIFG)) {};				// While TXing
+			UCA0TXBUF = tx_Data_8;							// 8 bits transmitted
+			while (UCA0STATW & UCBUSY) {};					// While not busy
+			P1OUT |= BIT4;
+			break;
+
+		case 2:
+			P2OUT &= ~BIT8;									// Pulls SYNC low
+			while (!(UCA0IFG & UCTXIFG)) {};				// While TXing
+			UCA0TXBUF = tx_Data_8;							// 8 bits transmitted
+			while (UCA0STATW & UCBUSY) {};
+			P2OUT |= BIT6;
+			break;
+
+		case 3:
+			P3OUT &= ~BIT6;									// Pulls SYNC low
+			while (!(UCA0IFG & UCTXIFG)) {};    			// While TXing
+			UCA0TXBUF = tx_Data_8;							// 8 bits transmitted
+			while (UCA0STATW & UCBUSY) {};
+			P3OUT |= BIT6;
+			break;
+
+		case 4:
+			P4OUT &= ~BIT6;									// Pulls SYNC low
+			while (!(UCA0IFG & UCTXIFG)) {};    			// While TXing
+			UCA0TXBUF = tx_Data_8;							// 8 bits transmitted
+			while (UCA0STATW & UCBUSY) {};
+			P4OUT |= BIT6;
+			break;
+
+		case 5:
+			P5OUT &= ~BIT6;									// Pulls SYNC low
+			while (!(UCA0IFG & UCTXIFG)) {};    			// While TXing
+			UCA0TXBUF = tx_Data_8;							// 8 bits transmitted
+			while (UCA0STATW & UCBUSY) {};
+			P5OUT |= BIT6;
+			break;
+
+		case 6:
+			P6OUT &= ~BIT6;									// Pulls SYNC low
+			while (!(UCA0IFG & UCTXIFG)) {};    			// While TXing
+			UCA0TXBUF = tx_Data_8;							// 8 bits transmitted
+			while (UCA0STATW & UCBUSY) {};
+			P6OUT |= BIT6;
+			break;
+
+		case 7:
+			P7OUT &= ~BIT6;									// Pulls SYNC low
+			while (!(UCA0IFG & UCTXIFG)) {};    			// While TXing
+			UCA0TXBUF = tx_Data_8;							// 8 bits transmitted
+			while (UCA0STATW & UCBUSY) {};
+			P7OUT |= BIT6;
+			break;
+
+		case 8:
+			P8OUT &= ~BIT6;									// Pulls SYNC low
+			while (!(UCA0IFG & UCTXIFG)) {};    			// While TXing
+			UCA0TXBUF = tx_Data_8;							// 8 bits transmitted
+			while (UCA0STATW & UCBUSY) {};
+			P8OUT |= BIT6;
+			break;
+
+		case 9:
+			P9OUT &= ~BIT6;									// Pulls SYNC low
+			while (!(UCA0IFG & UCTXIFG)) {};    			// While TXing
+			UCA0TXBUF = tx_Data_8;							// 8 bits transmitted
+			while (UCA0STATW & UCBUSY) {};
+			P9OUT |= BIT6;
+			break;
+
+		case 10:
+			P1OUT &= ~BIT6;									// Pulls SYNC low
+			while (!(UCA0IFG & UCTXIFG)) {};    			// While TXing
+			UCA0TXBUF = tx_Data_8;							// 8 bits transmitted
+			while (UCA0STATW & UCBUSY) {};
+			P1OUT |= BIT6;
+			break;
+
+		default:
+			P1OUT &= ~BIT6;									// Pulls SYNC low
+			while (!(UCA0IFG & UCTXIFG)) {};    			// While TXing
+			UCA0TXBUF = tx_Data_8;							// 8 bits transmitted
+			while (UCA0STATW & UCBUSY) {};
+			P1OUT |= BIT6;
+	}
+}
+
+////////////////////// SPI WRITE 16 BIT /////////////////////////////////////
 void write_uint16_SPI (uint16_t tx_Data_16, uint8_t device_CS) {
 	while (!(UCA0IFG & UCTXIFG)){};							// If able to TX
 
 	switch (device_CS) {
 		case 1:
-			P1OUT &= ~BIT6;									// Pulls SYNC low
+			P1OUT &= ~BIT4;									// Pulls SYNC low
 			while (!(UCA0IFG & UCTXIFG)) {};    			// While TXing
 			UCA0TXBUF = (tx_Data_16 >> 8);					// First 8 bits transmitted (Control bits and data)
 			while (!(UCA0IFG & UCTXIFG)) {};
 			UCA0TXBUF = tx_Data_16;							// Last 8 bits transmitted (overflow expected and is fine)
 			while (UCA0STATW & UCBUSY) {};
-			P1OUT |= BIT6;
+			P1OUT |= BIT4;
 			break;
 
 		case 2:
@@ -218,7 +315,14 @@ void write_uint16_SPI (uint16_t tx_Data_16, uint8_t device_CS) {
 	}
 }
 
+////////////////////// SPI READ POLLING //////////////////////////////////
+uint8_t read_SPI (void) {
+	while (!(UCA0IFG & UCRXIFG)) {};    			// While RX flag is high
+	g_RXData = UCA0RXBUF;							// First 8 bits transmitted (Control bits and data)
+	return g_RXData;
+}
 
+////////////////////// LEGAL /////////////////////////////////////
 /* XT1 config section:
  *
  *
