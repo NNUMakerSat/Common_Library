@@ -87,15 +87,14 @@ void init_UART (bool baud_Rate, bool pin_Setting) {
 		                                          // UCBRSx value = 0x53 (See UG)
 		UCA0BR1 = 0;
 		break;
-
-	UCA0CTL1 &= ~UCSWRST;                    	 // release from reset                   	 	// **Initialize USCI state machine**
 	}
+	UCA0CTL1 &= ~UCSWRST;                    	 // release from reset                   	 	// **Initialize USCI state machine**
 }
 
 ////////////////////// UART WRITE POLLING /////////////////////////////////////
 void write_UART (uint8_t TX_Data) {
 	while (!(UCA0IFG & UCTXIFG)){};					// If able to TX
-	while (UART_RADIO_BUSY) {};						// If Radio is not busy
+	while (P1IN) {};						// If Radio is not busy
 	UCA0TXBUF = TX_Data;							// 8 bits transmitted
 }
 

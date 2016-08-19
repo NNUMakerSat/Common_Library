@@ -14,8 +14,8 @@ int main(void) {
 	initialize_Clocks ();					// Sets up timers (takes care of FRAM issue)
 	initialize_Ports();						// Init all non used ports
 
-	bool baud_Rate = 1;					// Sets the Baud rate
-	bool pin_Setting = 0;				// selects the pins used
+	bool baud_Rate = 1;						// Sets the Baud rate
+	bool pin_Setting = 0;					// selects the pins used
 
 	init_UART (baud_Rate, pin_Setting);		// baud_Rate -> 0 = 9600 baud, 1 = 38,400 baud, default = 0
 											// pin_Setting -> 0 = P2.0 - TX, P2.1 - RX, P1.4 Radio Busy (default)
