@@ -1,9 +1,16 @@
+/*
+ * Send_To_Radio.c
+ *
+ *  Created on: Aug 19, 2016
+ *      Author: aaronewing
+ */
 #include <msp430.h>
 #include <stdint.h>
 #include <stdbool.h>
 #include "Circular_Buffer.h"
 #include "Initialize.h"
 #include "UART_Polling.h"
+#include "Send_To_Radio.h"
 
 
 uint8_t TX_Data = 0;
@@ -13,8 +20,8 @@ uint8_t i;
 uint8_t j = 0;
 
 // main.c
-int main(void) {
-	WDTCTL = WDTPW | WDTHOLD;               // Stop watchdog timer
+void Send_To_Radio(void) {
+//	WDTCTL = WDTPW | WDTHOLD;               // Stop watchdog timer
 
 	initialize_Clocks ();					// Sets up timers (takes care of FRAM issue)
 	initialize_Ports();						// Init all non used ports
@@ -50,3 +57,6 @@ int main(void) {
     	__delay_cycles(100000);
     } */
 }
+
+
+
