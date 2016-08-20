@@ -26,12 +26,14 @@ void initialize_Clocks(void) {								// Sets all clocks to standard position
 	CSCTL3 = DIVA__1 | DIVS__1 | DIVM__1;     // Set all dividers to 1 (all CLKS at highest frequency)
 	CSCTL4 |= LFXTDRIVE_3 | HFXTDRIVE_3;
 	CSCTL4 &= ~(LFXTOFF | HFXTOFF);
-	do
+/*	do
 	{
 		CSCTL5 &= ~LFXTOFFG;       	// Clear XT1 fault flag
 	    SFRIFG1 &= ~OFIFG;
 	}while (SFRIFG1&OFIFG);                 	  // Test oscillator fault flag
 		CSCTL0_H = 0;                             // Lock CS registers (does not allow change in clock)
+} */
+	CSCTL0_H = 0;                             // Lock CS registers (does not allow change in clock)
 }
 
 void initialize_Ports(void){			// sets all pins on all ports as an output (except Port 10)

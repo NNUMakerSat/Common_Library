@@ -8,7 +8,7 @@
 #define UART_POLLING_H_
 
 void init_UART (bool baud_Rate, bool pin_Setting);	// initalizes UART clk rate and which pins are being used
-void write_UART (uint8_t TX_Data);				// writes 8 bits with SPI
+void write_UART (uint8_t TX_Data);					// writes 8 bits with SPI
 uint8_t read_UART (void);
 
 #endif /* UART_POLLING_H_ */
