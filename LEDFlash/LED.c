@@ -38,20 +38,28 @@ void flash_LED_1(uint8_t clk_Delay1, uint32_t duration1) {
 		switch (clk_Delay1){
 		case 0:
 			__delay_cycles(100000);							// Delay to 160Hz/10Hz (16MHz clk vs. 1MHz clk)
+			break;
 		case 1:
 			__delay_cycles(1000000);						// Delay to 16Hz/1Hz (16MHz clk vs. 1MHz clk)
+			break;
 		case 2:
 			__delay_cycles(10000000);						// Delay to 1.6Hz/0.1Hz (16MHz clk vs. 1MHz clk)
+			break;
 		case 3:
 			__delay_cycles(100000000);						// Delay to 0.16Hz/0.01Hz (16MHz clk vs. 1MHz clk)
+			break;
 		case 4:
 			__delay_cycles(1600000);						// Delay to 10Hz/0.625Hz (16MHz clk vs. 1MHz clk)
+			break;
 		case 5:
 			__delay_cycles(16000000);						// Delay to 1Hz/0.0625Hz (16MHz clk vs. 1MHz clk)
+			break;
 		case 6:
 			__delay_cycles(160000000);						// Delay to 0.1Hz/0.00625Hz (16MHz clk vs. 1MHz clk)
+			break;
 		case 7:
 			__delay_cycles(1600000000);						// Delay to 0.01Hz/0.000625Hz (16MHz clk vs. 1MHz clk)
+			break;
 		}
 		P1OUT &= ~BIT0;
 	}
@@ -63,20 +71,28 @@ void flash_LED_2(uint8_t clk_Delay2, uint32_t duration2) {
 		switch (clk_Delay2){
 		case 0:
 			__delay_cycles(100000);							// Delay to 160Hz/10Hz (16MHz clk vs. 1MHz clk)
+			break;
 		case 1:
 			__delay_cycles(1000000);						// Delay to 16Hz/1Hz (16MHz clk vs. 1MHz clk)
+			break;
 		case 2:
 			__delay_cycles(10000000);						// Delay to 1.6Hz/0.1Hz (16MHz clk vs. 1MHz clk)
+			break;
 		case 3:
 			__delay_cycles(100000000);						// Delay to 0.16Hz/0.01Hz (16MHz clk vs. 1MHz clk)
+			break;
 		case 4:
 			__delay_cycles(1600000);						// Delay to 10Hz/0.625Hz (16MHz clk vs. 1MHz clk)
+			break;
 		case 5:
 			__delay_cycles(16000000);						// Delay to 1Hz/0.0625Hz (16MHz clk vs. 1MHz clk)
+			break;
 		case 6:
 			__delay_cycles(160000000);						// Delay to 0.1Hz/0.00625Hz (16MHz clk vs. 1MHz clk)
+			break;
 		case 7:
 			__delay_cycles(1600000000);						// Delay to 0.01Hz/0.000625Hz (16MHz clk vs. 1MHz clk)
+			break;
 		}
 		P9OUT &= ~BIT7;
 	}
