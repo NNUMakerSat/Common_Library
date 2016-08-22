@@ -14,7 +14,7 @@ void LED_2_On(void);
 void LED_1_Off(void);
 void LED_2_Off(void);
 
-void flash_LED_1(uint32_t clk_Delay1, uint32_t duration1);
-void flash_LED_2(uint32_t clk_Delay2, uint32_t duration2);
+void flash_LED_1(uint8_t clk_Delay1, uint32_t duration1);
+void flash_LED_2(uint8_t clk_Delay2, uint32_t duration2);
 
 #endif /* LED_H_ */

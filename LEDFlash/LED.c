@@ -4,6 +4,7 @@
  *  Created on: Aug 20, 2016
  *      Author: aaronewing
  */
+#include <msp430.h>
 #include <stdint.h>
 #include "LED.h"
 
@@ -31,21 +32,55 @@ void LED_2_Off(void) {
 	P9OUT &= ~BIT7;					// Turn off LED2
 }
 
-void flash_LED_1(uint32_t clk_Delay1, uint32_t duration1) {
-	P1DIR |= BIT0;						// Set LED1 as an output
+void flash_LED_1(uint8_t clk_Delay1, uint32_t duration1) {
+	P1DIR |= BIT0;											// Set LED1 as an output
 
-	for (g_timer1 = 0; g_timer1 < duration; ++g_timer1) {	// Flash LED however long you want at whatever frequency you want
+	for (g_timer1 = 0; g_timer1 < duration1; ++g_timer1) {	// Flash LED however long you want at whatever frequency you want
 		P1OUT = BIT0;
-		__delay_cycles(clk_Delay);
+		switch (clk_Delay1){
+		case 0:
+			__delay_cycles(100000);							// Delay to 160Hz/10Hz (16MHz clk vs. 1MHz clk)
+		case 1:
+			__delay_cycles(1000000);						// Delay to 16Hz/1Hz (16MHz clk vs. 1MHz clk)
+		case 2:
+			__delay_cycles(10000000);						// Delay to 1.6Hz/0.1Hz (16MHz clk vs. 1MHz clk)
+		case 3:
+			__delay_cycles(100000000);						// Delay to 0.16Hz/0.01Hz (16MHz clk vs. 1MHz clk)
+		case 4:
+			__delay_cycles(1600000);						// Delay to 10Hz/0.625Hz (16MHz clk vs. 1MHz clk)
+		case 5:
+			__delay_cycles(16000000);						// Delay to 1Hz/0.0625Hz (16MHz clk vs. 1MHz clk)
+		case 6:
+			__delay_cycles(160000000);						// Delay to 0.1Hz/0.00625Hz (16MHz clk vs. 1MHz clk)
+		case 7:
+			__delay_cycles(1600000000);						// Delay to 0.01Hz/0.000625Hz (16MHz clk vs. 1MHz clk)
+		}
 		P1OUT &= ~BIT0;
 	}
 }
-	void flash_LED_2(uint8_t clk_Delay2, uint8_t duration2) {
+	void flash_LED_2(uint8_t clk_Delay2, uint32_t duration2) {
 	P9DIR |= BIT7;						// Set LED2 as an output
 
-	for (g_timer2 = 0; g_timer2 < duration; ++g_timer2) {	// Flash LED however long you want at whatever frequency you want
+	for (g_timer2 = 0; g_timer2 < duration2; ++g_timer2) {	// Flash LED however long you want at whatever frequency you want
 		P9OUT = BIT7;
-		__delay_cycles(clk_Delay);
+		switch (clk_Delay2){
+		case 0:
+			__delay_cycles(100000);							// Delay to 160Hz/10Hz (16MHz clk vs. 1MHz clk)
+		case 1:
+			__delay_cycles(1000000);						// Delay to 16Hz/1Hz (16MHz clk vs. 1MHz clk)
+		case 2:
+			__delay_cycles(10000000);						// Delay to 1.6Hz/0.1Hz (16MHz clk vs. 1MHz clk)
+		case 3:
+			__delay_cycles(100000000);						// Delay to 0.16Hz/0.01Hz (16MHz clk vs. 1MHz clk)
+		case 4:
+			__delay_cycles(1600000);						// Delay to 10Hz/0.625Hz (16MHz clk vs. 1MHz clk)
+		case 5:
+			__delay_cycles(16000000);						// Delay to 1Hz/0.0625Hz (16MHz clk vs. 1MHz clk)
+		case 6:
+			__delay_cycles(160000000);						// Delay to 0.1Hz/0.00625Hz (16MHz clk vs. 1MHz clk)
+		case 7:
+			__delay_cycles(1600000000);						// Delay to 0.01Hz/0.000625Hz (16MHz clk vs. 1MHz clk)
+		}
 		P9OUT &= ~BIT7;
 	}
 }
