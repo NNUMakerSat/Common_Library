@@ -10,6 +10,7 @@ GEN_OPTS__FLAG :=
 GEN_CMDS__FLAG := 
 
 ORDERED_OBJS += \
+"./Circular_Buffer.obj" \
 "./Initialize.obj" \
 "./UART_Polling.obj" \
 "./main.obj" \
@@ -155,8 +156,8 @@ UART_Polling.hex: $(EXE_OUTPUTS)
 # Other Targets
 clean:
 	-$(RM) $(EXE_OUTPUTS__QUOTED)$(BIN_OUTPUTS__QUOTED)
-	-$(RM) "Initialize.d" "UART_Polling.d" "main.d" 
-	-$(RM) "Initialize.obj" "UART_Polling.obj" "main.obj" 
+	-$(RM) "Circular_Buffer.d" "Initialize.d" "UART_Polling.d" "main.d" 
+	-$(RM) "Circular_Buffer.obj" "Initialize.obj" "UART_Polling.obj" "main.obj" 
 	-@echo 'Finished clean'
 	-@echo ' '
 

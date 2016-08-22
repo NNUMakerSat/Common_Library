@@ -8,6 +8,8 @@
 #ifndef LED_H_
 #define LED_H_
 
+void init_LED(void);
+
 void LED_1_On(void);
 void LED_2_On(void);
 
