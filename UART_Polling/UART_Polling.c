@@ -94,7 +94,7 @@ void init_UART (bool baud_Rate, bool pin_Setting) {
 ////////////////////// UART WRITE POLLING /////////////////////////////////////
 void write_UART (uint8_t TX_Data) {
 	while (!(UCA0IFG & UCTXIFG)){};					// If able to TX
-	while (P1IN == UART_RADIO_BUSY) {};								// If Radio is not busy
+	while (P1IN == UART_RADIO_BUSY) {};				// If Radio is not busy
 	UCA0TXBUF = TX_Data;							// 8 bits transmitted
 }
 
