@@ -63,7 +63,7 @@ void flash_LED_1(uint8_t clk_Delay1, uint32_t duration1) {		// Flash LED however
 					__delay_cycles(1600000000);						// Delay to 0.01Hz/0.000625Hz (16MHz clk vs. 1MHz clk)
 					break;
 				default:
-					__delay_cycles(1000000);						// Default = Case 1
+					__delay_cycles(20000);							// Delay to 1600Hz/500Hz (16MHz clk vs. 1MHz clk)
 					break;
 				}
 			}
@@ -96,7 +96,7 @@ void flash_LED_1(uint8_t clk_Delay1, uint32_t duration1) {		// Flash LED however
 					__delay_cycles(1600000000);						// Delay to 0.01Hz/0.000625Hz (16MHz clk vs. 1MHz clk)
 					break;
 				default:
-					__delay_cycles(1000000);						// Default = Case 1
+					__delay_cycles(20000);							// Delay to 1600Hz/500Hz (16MHz clk vs. 1MHz clk)
 					break;
 				}
 			}
@@ -136,7 +136,7 @@ void flash_LED_2(uint8_t clk_Delay2, uint32_t duration2) {	// Flash LED however 
 					__delay_cycles(1600000000);						// Delay to 0.01Hz/0.000625Hz (16MHz clk vs. 1MHz clk)
 					break;
 				default:
-					__delay_cycles(1000000);						// Default = Case 1
+					__delay_cycles(20000);							// Delay to 1600Hz/500Hz (16MHz clk vs. 1MHz clk)
 					break;
 				}
 			}
@@ -169,7 +169,7 @@ void flash_LED_2(uint8_t clk_Delay2, uint32_t duration2) {	// Flash LED however 
 					__delay_cycles(1600000000);						// Delay to 0.01Hz/0.000625Hz (16MHz clk vs. 1MHz clk)
 					break;
 				default:
-					__delay_cycles(1000000);						// Default = Case 1
+					__delay_cycles(20000);							// Delay to 1600Hz/500Hz (16MHz clk vs. 1MHz clk)
 					break;
 				}
 			}
