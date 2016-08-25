@@ -196,7 +196,7 @@ char write( registerAddress, setBits) {
 		UCB1CTL1 |= UCTXSTP;
 	return 0;
 }
-
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void initGyro(void) {
 	UCB1I2CSA = gyro_Address;                   	// Slave Address is 069h
 
