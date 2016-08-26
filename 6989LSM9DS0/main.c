@@ -19,6 +19,7 @@
 #include <msp430fr6989.h>
 #include <stdio.h>
 #include <stdint.h>
+#include "Initialize.h"
 #include "LSM9DS0.h"
 
 #define G_GAIN		0.07		//[deg/s/LSB]
@@ -70,6 +71,8 @@ char read(void);
 int main(void) {
 	WDTCTL = WDTPW + WDTHOLD;                 			// Stop WDT
 	PM5CTL0 &= ~LOCKLPM5;
+
+	initialize_Ports();						// Init all non used ports
 
 ////////////////////////Set clock speed///////////////////////////
 	CSCTL0_H = CSKEY >> 8;                    				// Unlock CS registers

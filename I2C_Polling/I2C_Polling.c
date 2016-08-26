@@ -9,7 +9,7 @@
 #include <stdbool.h>
 #include "I2C_Polling.h"
 
-void init_I2C_Hub (uint8_t slave_Add, uint16_t byte_Count, bool pin_Setting) {				// initalizes I2C clk rate and which pins are being used
+void init_I2C_Hub (uint8_t slave_Add, bool pin_Setting) {				// initalizes I2C clk rate and which pins are being used
 	switch (pin_Setting) {
 	case 0:
 		P1SEL1 |= BIT6 | BIT7;				// SDA - P1.6, SCL - P1.7 (secondary function)
@@ -18,8 +18,8 @@ void init_I2C_Hub (uint8_t slave_Add, uint16_t byte_Count, bool pin_Setting) {		
 		UCB0CTLW1 |= UCASTP_2;                  // Automatic stop generated
 			                                    // after UCB0TBCNT is reached
 		UCB0BRW = 0x0008;                       // baudrate = SMCLK / 8
-		UCB0TBCNT = byte_Count;	                // number of bytes to be received
-		UCB0I2CSA = slave_Add;				// Slave address
+//		UCB0TBCNT = byte_Count;	                // number of bytes to be received
+		UCB0I2CSA = slave_Add;					// Slave address
 		UCB1BRW = 80;                           // fSCL = 1Mhz/100 = ~100kHz <new>/no effect
 		UCB0CTLW0 &= ~UCSWRST;
 		break;
@@ -31,8 +31,8 @@ void init_I2C_Hub (uint8_t slave_Add, uint16_t byte_Count, bool pin_Setting) {		
 		UCB1CTLW1 |= UCASTP_2;                  // Automatic stop generated
 		                                        // after UCB0TBCNT is reached
 		UCB1BRW = 0x0008;                       // baudrate = SMCLK / 8
-		UCB1TBCNT = byte_Count;	                // number of bytes to be received
-		UCB1I2CSA = slave_Add;				// Slave address
+//		UCB1TBCNT = byte_Count;	                // number of bytes to be received
+		UCB1I2CSA = slave_Add;					// Slave address
 		UCB1BRW = 80;                           // fSCL = 1Mhz/100 = ~100kHz <new>/no effect
 		UCB1CTLW0 &= ~UCSWRST;
 		break;
@@ -118,7 +118,7 @@ void write_uint32_I2C (uint32_t tx_Data_32, bool pin_Setting) {		// writes 16 bi
 	}
 }
 
-uint8_t read_I2C (bool pin_Setting) {												// reads 8 bits with I2C
+uint8_t read_I2C (uint8_t output_Reg, bool pin_Setting) {												// reads 8 bits with I2C
 	uint8_t RX_Data;
 	switch (pin_Setting) {
 	case 0:
@@ -131,11 +131,17 @@ uint8_t read_I2C (bool pin_Setting) {												// reads 8 bits with I2C
 	case 1:
 	default:
 		while (UCB1CTL1 & UCTXSTP);             // Ensure stop condition got sent
-		UCB1CTL1 |= UCTXSTT;                    // I2C start condition
+		UCB1CTL1 |= UCTR | UCTXSTT;                    // I2C start condition
 
-		while (!(UCB1IFG & UCRXIFG1)) {};		// When RX Buffer is full
-		RX_Data = UCB1RXBUF;
-		break;
+		while ((UCB1CTL1 & UCTXSTT) || !(UCB1IFG & UCTXIFG0));		// When RX Buffer is full
+			UCB1TXBUF = output_Reg;				// Read from output_Reg register
+		while (!(UCB1IFG & UCTXIFG0));
+			UCB1CTL1 &= ~UCTR;                     		// Clear I2C TX flag
+			UCB1CTL1 |= UCTXSTT;
+		while (UCB1CTL1 & UCTXSTT);                     // I2C start condition
+			UCB1CTL1 |= UCTXSTP;
+		while (!(UCB1IFG & UCRXIFG0));
+			RX_Data = UCB1RXBUF;
 	}
 	return RX_Data;
 }

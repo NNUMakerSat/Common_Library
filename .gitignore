@@ -152,3 +152,4 @@ UART_Polling/Debug/makefile
 UART_Polling/Debug/makefile
 LEDFlash/Debug/makefile
 UART_Polling/Debug/makefile
+I2C_Polling/Debug/makefile
