@@ -45,7 +45,7 @@ float rate_gyr_y;
 float rate_gyr_z;
 char gyro_Address = 0x6A;				//Use 6A on berryIMU, 6B on Hub
 char XMAddress = 0x1E;					//Use 1E on berryIMU, 1D on Hub
-char outputRegister;
+char outputRegister;		// TX output
 char outString[50]; 					//character string to output to Putty
 int i;
 
@@ -57,9 +57,9 @@ char read(void);
 
 // main.c
 int main(void) {
-	uint8_t slave_Address = 0x69;
-	uint16_t byte_Count;
-	bool pin_Setting = 0;
+//	uint8_t slave_Address = 0x6A;
+	uint16_t byte_Count = 10;
+	bool pin_Setting = 1;
 
 	WDTCTL = WDTPW | WDTHOLD;               // Stop watchdog timer
 
@@ -74,18 +74,39 @@ int main(void) {
 	rate_gyr_y = 0;
 	rate_gyr_z = 0;
 
-	init_I2C();
-	//P9OUT = 0xA0;				//Turn on red LED after i2c initialization
-	initUart();
-	__delay_cycles(800);
-	initGyro();
-	//P9OUT = 0x40;				//Turn on LED after gyroscope initialization
-	__delay_cycles(800);
-	initXM();
+	init_I2C_Hub(gyro_Address, byte_Count, pin_Setting);	// init Hub, 100 bytes, SDA - P3.1, SCL - P3.2
+//	init_I2C_SB(0x6A, pin_Setting);				// init gyro, address is 0x69 and same chanle as Hub
 
+	initGyro();
+
+//	initXM();
 	while (1) {
+	///////////////Aaron Read//////////////////////
+		UCB1I2CSA = gyro_Address;
+
+		outputRegister = OUT_X_L_G;
+		xRate_L = read_I2C(pin_Setting);
+		outputRegister = OUT_X_H_G;
+		xRate_H = read_I2C(pin_Setting);
+
+		outputRegister = OUT_Y_L_G;
+		yRate_L = read_I2C(pin_Setting);
+
+		outputRegister = OUT_Y_H_G;
+		yRate_H = read_I2C(pin_Setting);
+
+		outputRegister = OUT_Z_L_G;
+		zRate_L = read_I2C(pin_Setting);
+
+		outputRegister = OUT_Z_H_G;
+		zRate_H = read_I2C(pin_Setting);
+	}
+}
+
+/*	while (1) {
 		////////////READ GYROSCOPE//////////////
 		UCB1I2CSA = gyro_Address;
+
 		outputRegister = OUT_X_L_G;
 		xRate_L = read();
 		outputRegister = OUT_X_H_G;
@@ -102,9 +123,9 @@ int main(void) {
 
 		outputRegister = OUT_Z_H_G;
 		zRate_H = read();
-
+*/
 		/////////////READ ACCELEROMETER/////////////////
-		UCB1I2CSA = XMAddress;
+/*		UCB1I2CSA = XMAddress;
 
 		outputRegister = OUT_X_L_A;
 		xaccel_L = read();
@@ -172,7 +193,7 @@ char write( registerAddress, setBits) {
 		UCB1TXBUF = setBits;                     			// Clear I2C TX flag
 		UCB1CTL1 |= UCTXSTP;
 	return 0;
-}
+} */
 	///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void initGyro(void) {
 	UCB1I2CSA = gyro_Address;                   	// Slave Address is 069h
@@ -197,7 +218,7 @@ void initGyro(void) {
 		UCB1CTL1 |= UCTXSTP;                    	// I2C stop condition
 		UCB1IFG &= ~UCTXIFG;                     	// Clear USCI_B0 TX int flag
 }
-
+/*
 void initXM(void) {
 	UCB1I2CSA = XMAddress;                   		// Slave Address is 069h
 
@@ -269,4 +290,4 @@ void initUart(void) {
 //	UCA0BRW = 104;
 	UCA0BRW =13;
 	UCA0CTL1 &= ~UCSWRST;
-}
+} */

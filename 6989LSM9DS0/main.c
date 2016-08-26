@@ -88,7 +88,7 @@ int main(void) {
 	init_I2C();
 	//P9OUT = 0xA0;				//Turn on red LED after i2c initialization
 	initUart();
-	__delay_cycles(800);
+//	__delay_cycles(800);
 	initGyro();
 	//P9OUT = 0x40;				//Turn on LED after gyroscope initialization
 	__delay_cycles(800);
@@ -204,7 +204,7 @@ void initGyro(void) {
 		UCB1CTL1 |= UCTR + UCTXSTT;              	// I2C TX with start condition
 	while (UCB1CTL1 & UCTXSTT);
 		UCB1TXBUF = CTRL_REG1_G; 					// Low pass filter value register address to TXBuffer
-	while ((UCB1IFG & UCTXIFG) == 0); 				//ADD CONDITION HERE TO CHECK FOR ACK
+	while ((UCB1IFG & UCTXIFG) == 0); 				// ADD CONDITION HERE TO CHECK FOR ACK
 		UCB1TXBUF = 0x0F;     						// config value to TXBuffer
 	while ((UCB1IFG & UCTXIFG) == 0);
 		UCB1CTL1 |= UCTXSTP;                   		// I2C stop condition
@@ -276,8 +276,9 @@ void initXM(void) {
 }
 
 void init_I2C(void) {
-	P3SEL0 |= BIT1 + BIT2;     							// Assign I2C pins to USCI_B1
-	P3SEL1 &= ~(BIT1 + BIT2);     						// Assign I2C pins to USCI_B1
+//	P3SEL0 |= BIT1 + BIT2;     							// Assign I2C pins to USCI_B1
+//	P3SEL1 &= ~(BIT1 + BIT2);     						// Assign I2C pins to USCI_B1
+	P3SEL1 |= BIT1 | BIT2;
 	UCB1CTLW0 |= UCSWRST;                      			// Enable SW reset
 	UCB1CTLW0 |= UCMST + UCMODE_3 + UCSYNC + UCSSEL_2; 	// I2C Master, synchronous mode
 	UCB1BRW = 80;                             			// fSCL = 1Mhz/100 = ~100kHz
