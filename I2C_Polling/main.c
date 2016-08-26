@@ -57,7 +57,7 @@ char read(void);
 
 // main.c
 int main(void) {
-//	uint8_t slave_Address = 0x6A;
+//	uint8_t slave_Address = 0x6A; //gryo be 69h
 	uint16_t byte_Count = 10;
 	bool pin_Setting = 1;
 
@@ -75,9 +75,12 @@ int main(void) {
 	rate_gyr_z = 0;
 
 	init_I2C_Hub(gyro_Address, byte_Count, pin_Setting);	// init Hub, 100 bytes, SDA - P3.1, SCL - P3.2
-//	init_I2C_SB(0x6A, pin_Setting);				// init gyro, address is 0x69 and same chanle as Hub
+//	init_I2C_Slave(0x6A, pin_Setting);				// init gyro, address is 0x69 and same chanle as Hub
 
-	initGyro();
+	write_uint8_I2C(gyro_Address, CTRL_REG1_G, 0x0F, pin_Setting);		// sets up Gyro
+	// uint8_t slave_Add, uint8_t reg_Add, uint8_t tx_Data_8, bool pin_Setting
+	write_uint8_I2C(gyro_Address, CTRL_REG4_G, 0x30, pin_Setting);
+//	initGyro();
 
 //	initXM();
 	while (1) {
@@ -200,11 +203,17 @@ void initGyro(void) {
 
 	while (UCB1CTL1 & UCTXSTP);               		// Ensure stop condition got sent
 		UCB1CTL1 |= UCTR + UCTXSTT;              	// I2C TX with start condition
-	while (UCB1CTL1 & UCTXSTT);
+	while (UCB1CTLW0 & UCTXSTT);
 		UCB1TXBUF = CTRL_REG1_G; 					// Low pass filter value register address to TXBuffer
-	while ((UCB1IFG & UCTXIFG) == 0); 				// ADD CONDITION HERE TO CHECK FOR ACK
+	while ((UCB1IFG & UCTXIFG) == 0); 				// TX empty?
+	while (UCNACKIFG) {								// NACK check
+		UCB1TXBUF = CTRL_REG1_G; 					// Keep resending if NACK <what if forever NACK?>
+	}
 		UCB1TXBUF = 0x0F;     						// config value to TXBuffer
 	while ((UCB1IFG & UCTXIFG) == 0);
+	while (UCNACKIFG) {								// NACK check
+		UCB1TXBUF = 0x0F; 							// Keep resending if NACK <what if forever NACK?>
+	}
 		UCB1CTL1 |= UCTXSTP;                   		// I2C stop condition
 		UCB1IFG &= ~UCTXIFG;                   		// Clear USCI_B0 TX int flag
 
@@ -213,8 +222,14 @@ void initGyro(void) {
 	while (UCB1CTL1 & UCTXSTT);
 		UCB1TXBUF = CTRL_REG4_G;
 	while ((UCB1IFG & UCTXIFG) == 0);				// Sample Rate Divider value to TXBuffer
+	while (UCNACKIFG) {								// NACK check
+		UCB1TXBUF = CTRL_REG4_G; 					// Keep resending if NACK <what if forever NACK?>
+	}
 		UCB1TXBUF = 0x30; 							// config value to TXBuffer
 	while ((UCB1IFG & UCTXIFG) == 0);
+	while (UCNACKIFG) {								// NACK check
+		UCB1TXBUF = 0x30; 							// Keep resending if NACK <what if forever NACK?>
+	}
 		UCB1CTL1 |= UCTXSTP;                    	// I2C stop condition
 		UCB1IFG &= ~UCTXIFG;                     	// Clear USCI_B0 TX int flag
 }
