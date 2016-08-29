@@ -15,6 +15,9 @@
 uint16_t dac_Val = 0x0000;
 uint8_t tx_Data_8 = 100;
 uint16_t tx_Data_16;
+uint8_t collection[1000];
+uint16_t i = 0;
+uint8_t g_RXData;
 
 // main.c
 int main(void) {
@@ -32,28 +35,27 @@ int main(void) {
 	//P1.4 - CLK, P1.6 - SIMO, P1.7 - SOMI
 													// pin_Setting -> default =>  P1.5 - UCA0CLK, P1.6 - SYNC, P2.0 - SIMO, P2.1 - SOMI
 
-/*	P4DIR |= SCI_1_SEL;
-	P4OUT |= SCI_1_SEL;
-
 	P1SEL0 &= ~BIT4;
 	P1SEL1 &= ~BIT4;							// P1.4 - SYNC/Slave Select (5k POT)
 	P1SEL0 |= BIT6 + BIT7;
 	P1DIR |= BIT4 + BIT6 + BIT7;
 	P1OUT |= BIT4 + BIT6 + BIT7;
 
-/*	while (1) {
-		P1OUT ^= BIT4 + BIT6 + BIT7;
-		__delay_cycles(1000);
-	} */
+	while (1) {
+		read_SPI ();
+		collection[i] = g_RXData;
+		++i;
+		LED_2_On();
+		flash_LED_1(10, 1);
+	}
 
-    while(1) {
+/*    while(1) {
 //    	tx_Data_16 = (dac_Val & DAC_PD_NORMAL);		// Data to transmit (both value and control bits)
 //    	write_uint16_SPI (tx_Data_16, device_CS); 						(DAC)
 //    	++dac_Val;
 
     	write_uint8_SPI (tx_Data_8, device_CS);
     	++tx_Data_8;													// (5k POT)
-    	flash_LED_1(1,1);
  //   	__delay_cycles(100000);
-    }
+    } */
 }
