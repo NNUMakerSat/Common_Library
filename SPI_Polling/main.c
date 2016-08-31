@@ -53,7 +53,7 @@ int main(void) {
 
     	write_uint8_SPI (tx_Data_8, device_CS);
     	++tx_Data_8;													// (5k POT)
-    	flash_LED_1(1,1);
+ //   	flash_LED_1(1,1);
  //   	__delay_cycles(100000);
     }
 }

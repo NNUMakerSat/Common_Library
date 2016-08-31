@@ -34,12 +34,22 @@ int main(void) {
 	init_SPI (clk_Rate, pin_Setting);		// clk_Rate -> 8 = 8MHz, 4 = 4MHz, 2 = 2.67MHz, 1 = 1MHz
 	//P1.4 - CLK, P1.6 - SIMO, P1.7 - SOMI
 													// pin_Setting -> default =>  P1.5 - UCA0CLK, P1.6 - SYNC, P2.0 - SIMO, P2.1 - SOMI
+	P4DIR |= SCI_1_SEL;
+	P4DIR &= ~SCI_2_SEL;
+	P4DIR &= ~SCI_3_SEL;
+	P4DIR &= ~SCI_4_SEL;
 
-	P1SEL0 &= ~BIT4;
-	P1SEL1 &= ~BIT4;							// P1.4 - SYNC/Slave Select (5k POT)
+/*	P1SEL0 &= ~BIT5;
+	P1SEL1 &= ~BIT5;							// P1.5 - SYNC/Slave Select (5k POT)
 	P1SEL0 |= BIT6 + BIT7;
 	P1DIR |= BIT4 + BIT6 + BIT7;
-	P1OUT |= BIT4 + BIT6 + BIT7;
+	P1OUT |= BIT4 + BIT6 + BIT7; */
+
+	P4SEL0 &= ~BIT0;
+	P4SEL1 &= ~BIT0;							// P1.5 - SYNC/Slave Select (5k POT)
+	P4DIR |= BIT0;								// P4.4 - Hub's NSL analog on
+//	P4OUT &= ~BIT4;
+	P4OUT |= BIT0;
 
 	while (1) {
 		read_SPI ();
