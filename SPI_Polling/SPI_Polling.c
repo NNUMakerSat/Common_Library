@@ -18,10 +18,10 @@ void init_SPI (uint8_t clk_Rate, uint8_t pin_Setting) {
 			 P1SEL0 |= BIT4 | BIT6 | BIT7;       		// P1.4 - CLK, P1.6 - SIMO, P1.7 - SOMI
 
 			 // configure as GPIO used to enable SPI write to DAC
-			 P1SEL0 &= ~BIT5;
-			 P1SEL1 &= ~BIT5;							// P1.5 - SYNC/Slave Select
-			 P1DIR |= BIT5;
-			 P1OUT |= BIT5;
+			 P4SEL0 &= ~BIT1;
+			 P4SEL1 &= ~BIT1;							// P4.1 - SYNC/Slave Select
+			 P4DIR |= BIT1;
+			 P4OUT |= BIT1;
 			 break;
 
 		 case 2:
