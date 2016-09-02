@@ -70,7 +70,7 @@ void init_SPI (uint8_t pin_Setting) {
 	 UCB0CTLW0 |= UCMST | UCSYNC | UCMSB | UCCKPL;		// 3-pin, 8-bit SPI master
 	                                          	  	    // Clock polarity high, MSB
 	 UCB0CTLW0 |= UCSSEL__SMCLK;              	 		// SMCLK
-	 CSCTL3 = DIVS__8									// Divides SMCLK by 8 (8MHz/8 = 1MHz)
+	 CSCTL3 = DIVS__8;									// Divides SMCLK by 8 (8MHz/8 = 1MHz)
 
 	 // Baud setup, SMCLK is set to 8 MHz
 /*	 	 switch (baud_Rate) {
