@@ -94,231 +94,231 @@ void init_SPI (uint8_t clk_Rate, uint8_t pin_Setting) {
  	CSCTL0_H = 0;                             	// Lock CS registers
 
 	 // Configure USCI_A0 for SPI operation
-	 UCB0CTLW0 = UCSWRST;                      		// **Put state machine in reset**
+	 UCA0CTLW0 = UCSWRST;                      		// **Put state machine in reset**
 
-	 UCB0CTLW0 |= UCMST | UCSYNC | UCMSB | UCCKPL;	// 3-pin, 8-bit SPI master
+	 UCA0CTLW0 |= UCMST | UCSYNC | UCMSB | UCCKPL;	// 3-pin, 8-bit SPI master
 	                                          	  	    // Clock polarity high, MSB
-	 UCB0CTLW0 |= UCSSEL__SMCLK;              	 	// SMCLK
-	 UCB0BR0 = 0x02;                           		// /2  <<look if problems>>
-	 UCB0BR1 = 0;                             	 	//
-	 UCB0MCTLW = 0;                           	 	// No modulation
-	 UCB0CTLW0 &= ~UCSWRST;                   	 	// **Initialize USCI state machine**
+	 UCA0CTLW0 |= UCSSEL__SMCLK;              	 	// SMCLK
+	 UCA0BR0 = 0x02;                           		// /2  <<look if problems>>
+	 UCA0BR1 = 0;                             	 	//
+	 UCA0MCTLW = 0;                           	 	// No modulation
+	 UCA0CTLW0 &= ~UCSWRST;                   	 	// **Initialize USCI state machine**
 }
 
 ////////////////////// SPI WRITE 8 BIT /////////////////////////////////////
 void write_uint8_SPI (uint8_t tx_Data_8, uint8_t device_CS) {
-	while (!(UCB0IFG & UCTXIFG)){};							// If able to TX
+	while (!(UCA0IFG & UCTXIFG)){};							// If able to TX
 
 	switch (device_CS) {
 		case 1:
 			P1OUT &= ~BIT4;									// Pulls SYNC low
-			while (!(UCB0IFG & UCTXIFG)) {};				// While TXing
-			UCB0TXBUF = tx_Data_8;							// 8 bits transmitted
-			while (UCB0STATW & UCBUSY) {};					// While not busy
+			while (!(UCA0IFG & UCTXIFG)) {};				// While TXing
+			UCA0TXBUF = tx_Data_8;							// 8 bits transmitted
+			while (UCA0STATW & UCBUSY) {};					// While not busy
 			P1OUT |= BIT4;
 			break;
 
 		case 2:
 			P2OUT &= ~BIT8;									// Pulls SYNC low
-			while (!(UCB0IFG & UCTXIFG)) {};				// While TXing
-			UCB0TXBUF = tx_Data_8;							// 8 bits transmitted
-			while (UCB0STATW & UCBUSY) {};
+			while (!(UCA0IFG & UCTXIFG)) {};				// While TXing
+			UCA0TXBUF = tx_Data_8;							// 8 bits transmitted
+			while (UCA0STATW & UCBUSY) {};
 			P2OUT |= BIT6;
 			break;
 
 		case 3:
 			P3OUT &= ~BIT6;									// Pulls SYNC low
-			while (!(UCB0IFG & UCTXIFG)) {};    			// While TXing
-			UCB0TXBUF = tx_Data_8;							// 8 bits transmitted
-			while (UCB0STATW & UCBUSY) {};
+			while (!(UCA0IFG & UCTXIFG)) {};    			// While TXing
+			UCA0TXBUF = tx_Data_8;							// 8 bits transmitted
+			while (UCA0STATW & UCBUSY) {};
 			P3OUT |= BIT6;
 			break;
 
 		case 4:
-			P4OUT &= ~BIT1;									// Pulls SYNC low
-			while (!(UCB0IFG & UCTXIFG)) {};    			// While TXing
-			UCB0TXBUF = tx_Data_8;							// 8 bits transmitted
-			while (UCB0STATW & UCBUSY) {};
-			P4OUT |= BIT1;
+			P4OUT &= ~BIT6;									// Pulls SYNC low
+			while (!(UCA0IFG & UCTXIFG)) {};    			// While TXing
+			UCA0TXBUF = tx_Data_8;							// 8 bits transmitted
+			while (UCA0STATW & UCBUSY) {};
+			P4OUT |= BIT6;
 			break;
 
 		case 5:
 			P5OUT &= ~BIT6;									// Pulls SYNC low
-			while (!(UCB0IFG & UCTXIFG)) {};    			// While TXing
-			UCB0TXBUF = tx_Data_8;							// 8 bits transmitted
-			while (UCB0STATW & UCBUSY) {};
+			while (!(UCA0IFG & UCTXIFG)) {};    			// While TXing
+			UCA0TXBUF = tx_Data_8;							// 8 bits transmitted
+			while (UCA0STATW & UCBUSY) {};
 			P5OUT |= BIT6;
 			break;
 
 		case 6:
 			P6OUT &= ~BIT6;									// Pulls SYNC low
-			while (!(UCB0IFG & UCTXIFG)) {};    			// While TXing
-			UCB0TXBUF = tx_Data_8;							// 8 bits transmitted
-			while (UCB0STATW & UCBUSY) {};
+			while (!(UCA0IFG & UCTXIFG)) {};    			// While TXing
+			UCA0TXBUF = tx_Data_8;							// 8 bits transmitted
+			while (UCA0STATW & UCBUSY) {};
 			P6OUT |= BIT6;
 			break;
 
 		case 7:
 			P7OUT &= ~BIT6;									// Pulls SYNC low
-			while (!(UCB0IFG & UCTXIFG)) {};    			// While TXing
-			UCB0TXBUF = tx_Data_8;							// 8 bits transmitted
-			while (UCB0STATW & UCBUSY) {};
+			while (!(UCA0IFG & UCTXIFG)) {};    			// While TXing
+			UCA0TXBUF = tx_Data_8;							// 8 bits transmitted
+			while (UCA0STATW & UCBUSY) {};
 			P7OUT |= BIT6;
 			break;
 
 		case 8:
 			P8OUT &= ~BIT6;									// Pulls SYNC low
-			while (!(UCB0IFG & UCTXIFG)) {};    			// While TXing
-			UCB0TXBUF = tx_Data_8;							// 8 bits transmitted
-			while (UCB0STATW & UCBUSY) {};
+			while (!(UCA0IFG & UCTXIFG)) {};    			// While TXing
+			UCA0TXBUF = tx_Data_8;							// 8 bits transmitted
+			while (UCA0STATW & UCBUSY) {};
 			P8OUT |= BIT6;
 			break;
 
 		case 9:
 			P9OUT &= ~BIT6;									// Pulls SYNC low
-			while (!(UCB0IFG & UCTXIFG)) {};    			// While TXing
-			UCB0TXBUF = tx_Data_8;							// 8 bits transmitted
-			while (UCB0STATW & UCBUSY) {};
+			while (!(UCA0IFG & UCTXIFG)) {};    			// While TXing
+			UCA0TXBUF = tx_Data_8;							// 8 bits transmitted
+			while (UCA0STATW & UCBUSY) {};
 			P9OUT |= BIT6;
 			break;
 
 		case 10:
 			P1OUT &= ~BIT6;									// Pulls SYNC low
-			while (!(UCB0IFG & UCTXIFG)) {};    			// While TXing
-			UCB0TXBUF = tx_Data_8;							// 8 bits transmitted
-			while (UCB0STATW & UCBUSY) {};
+			while (!(UCA0IFG & UCTXIFG)) {};    			// While TXing
+			UCA0TXBUF = tx_Data_8;							// 8 bits transmitted
+			while (UCA0STATW & UCBUSY) {};
 			P1OUT |= BIT6;
 			break;
 
 		default:
 			P1OUT &= ~BIT6;									// Pulls SYNC low
-			while (!(UCB0IFG & UCTXIFG)) {};    			// While TXing
-			UCB0TXBUF = tx_Data_8;							// 8 bits transmitted
-			while (UCB0STATW & UCBUSY) {};
+			while (!(UCA0IFG & UCTXIFG)) {};    			// While TXing
+			UCA0TXBUF = tx_Data_8;							// 8 bits transmitted
+			while (UCA0STATW & UCBUSY) {};
 			P1OUT |= BIT6;
 	}
 }
 
 ////////////////////// SPI WRITE 16 BIT /////////////////////////////////////
 void write_uint16_SPI (uint16_t tx_Data_16, uint8_t device_CS) {
-	while (!(UCB0IFG & UCTXIFG)){};							// If able to TX
+	while (!(UCA0IFG & UCTXIFG)){};							// If able to TX
 
 	switch (device_CS) {
 		case 1:
 			P1OUT &= ~BIT4;									// Pulls SYNC low
-			while (!(UCB0IFG & UCTXIFG)) {};    			// While TXing
-			UCB0TXBUF = (tx_Data_16 >> 8);					// First 8 bits transmitted (Control bits and data)
-			while (!(UCB0IFG & UCTXIFG)) {};
-			UCB0TXBUF = tx_Data_16;							// Last 8 bits transmitted (overflow expected and is fine)
-			while (UCB0STATW & UCBUSY) {};
+			while (!(UCA0IFG & UCTXIFG)) {};    			// While TXing
+			UCA0TXBUF = (tx_Data_16 >> 8);					// First 8 bits transmitted (Control bits and data)
+			while (!(UCA0IFG & UCTXIFG)) {};
+			UCA0TXBUF = tx_Data_16;							// Last 8 bits transmitted (overflow expected and is fine)
+			while (UCA0STATW & UCBUSY) {};
 			P1OUT |= BIT4;
 			break;
 
 		case 2:
 			P2OUT &= ~BIT8;									// Pulls SYNC low
-			while (!(UCB0IFG & UCTXIFG)) {};    			// While TXing
-			UCB0TXBUF = (tx_Data_16 >> 8);					// First 8 bits transmitted (Control bits and data)
-			while (!(UCB0IFG & UCTXIFG)) {};
-			UCB0TXBUF = tx_Data_16;							// Last 8 bits transmitted (overflow expected and is fine)
-			while (UCB0STATW & UCBUSY) {};
+			while (!(UCA0IFG & UCTXIFG)) {};    			// While TXing
+			UCA0TXBUF = (tx_Data_16 >> 8);					// First 8 bits transmitted (Control bits and data)
+			while (!(UCA0IFG & UCTXIFG)) {};
+			UCA0TXBUF = tx_Data_16;							// Last 8 bits transmitted (overflow expected and is fine)
+			while (UCA0STATW & UCBUSY) {};
 			P2OUT |= BIT6;
 			break;
 
 		case 3:
 			P3OUT &= ~BIT6;									// Pulls SYNC low
-			while (!(UCB0IFG & UCTXIFG)) {};    			// While TXing
-			UCB0TXBUF = (tx_Data_16 >> 8);					// First 8 bits transmitted (Control bits and data)
-			while (!(UCB0IFG & UCTXIFG)) {};
-			UCB0TXBUF = tx_Data_16;							// Last 8 bits transmitted (overflow expected and is fine)
-			while (UCB0STATW & UCBUSY) {};
+			while (!(UCA0IFG & UCTXIFG)) {};    			// While TXing
+			UCA0TXBUF = (tx_Data_16 >> 8);					// First 8 bits transmitted (Control bits and data)
+			while (!(UCA0IFG & UCTXIFG)) {};
+			UCA0TXBUF = tx_Data_16;							// Last 8 bits transmitted (overflow expected and is fine)
+			while (UCA0STATW & UCBUSY) {};
 			P3OUT |= BIT6;
 			break;
 
 		case 4:
 			P4OUT &= ~BIT6;									// Pulls SYNC low
-			while (!(UCB0IFG & UCTXIFG)) {};    			// While TXing
-			UCB0TXBUF = (tx_Data_16 >> 8);					// First 8 bits transmitted (Control bits and data)
-			while (!(UCB0IFG & UCTXIFG)) {};
-			UCB0TXBUF = tx_Data_16;							// Last 8 bits transmitted (overflow expected and is fine)
-			while (UCB0STATW & UCBUSY) {};
+			while (!(UCA0IFG & UCTXIFG)) {};    			// While TXing
+			UCA0TXBUF = (tx_Data_16 >> 8);					// First 8 bits transmitted (Control bits and data)
+			while (!(UCA0IFG & UCTXIFG)) {};
+			UCA0TXBUF = tx_Data_16;							// Last 8 bits transmitted (overflow expected and is fine)
+			while (UCA0STATW & UCBUSY) {};
 			P4OUT |= BIT6;
 			break;
 
 		case 5:
 			P5OUT &= ~BIT6;									// Pulls SYNC low
-			while (!(UCB0IFG & UCTXIFG)) {};    			// While TXing
-			UCB0TXBUF = (tx_Data_16 >> 8);					// First 8 bits transmitted (Control bits and data)
-			while (!(UCB0IFG & UCTXIFG)) {};
-			UCB0TXBUF = tx_Data_16;							// Last 8 bits transmitted (overflow expected and is fine)
-			while (UCB0STATW & UCBUSY) {};
+			while (!(UCA0IFG & UCTXIFG)) {};    			// While TXing
+			UCA0TXBUF = (tx_Data_16 >> 8);					// First 8 bits transmitted (Control bits and data)
+			while (!(UCA0IFG & UCTXIFG)) {};
+			UCA0TXBUF = tx_Data_16;							// Last 8 bits transmitted (overflow expected and is fine)
+			while (UCA0STATW & UCBUSY) {};
 			P5OUT |= BIT6;
 			break;
 
 		case 6:
 			P6OUT &= ~BIT6;									// Pulls SYNC low
-			while (!(UCB0IFG & UCTXIFG)) {};    			// While TXing
-			UCB0TXBUF = (tx_Data_16 >> 8);					// First 8 bits transmitted (Control bits and data)
-			while (!(UCB0IFG & UCTXIFG)) {};
-			UCB0TXBUF = tx_Data_16;							// Last 8 bits transmitted (overflow expected and is fine)
-			while (UCB0STATW & UCBUSY) {};
+			while (!(UCA0IFG & UCTXIFG)) {};    			// While TXing
+			UCA0TXBUF = (tx_Data_16 >> 8);					// First 8 bits transmitted (Control bits and data)
+			while (!(UCA0IFG & UCTXIFG)) {};
+			UCA0TXBUF = tx_Data_16;							// Last 8 bits transmitted (overflow expected and is fine)
+			while (UCA0STATW & UCBUSY) {};
 			P6OUT |= BIT6;
 			break;
 
 		case 7:
 			P7OUT &= ~BIT6;									// Pulls SYNC low
-			while (!(UCB0IFG & UCTXIFG)) {};    			// While TXing
-			UCB0TXBUF = (tx_Data_16 >> 8);					// First 8 bits transmitted (Control bits and data)
-			while (!(UCB0IFG & UCTXIFG)) {};
-			UCB0TXBUF = tx_Data_16;							// Last 8 bits transmitted (overflow expected and is fine)
-			while (UCB0STATW & UCBUSY) {};
+			while (!(UCA0IFG & UCTXIFG)) {};    			// While TXing
+			UCA0TXBUF = (tx_Data_16 >> 8);					// First 8 bits transmitted (Control bits and data)
+			while (!(UCA0IFG & UCTXIFG)) {};
+			UCA0TXBUF = tx_Data_16;							// Last 8 bits transmitted (overflow expected and is fine)
+			while (UCA0STATW & UCBUSY) {};
 			P7OUT |= BIT6;
 			break;
 
 		case 8:
 			P8OUT &= ~BIT6;									// Pulls SYNC low
-			while (!(UCB0IFG & UCTXIFG)) {};    			// While TXing
-			UCB0TXBUF = (tx_Data_16 >> 8);					// First 8 bits transmitted (Control bits and data)
-			while (!(UCB0IFG & UCTXIFG)) {};
-			UCB0TXBUF = tx_Data_16;							// Last 8 bits transmitted (overflow expected and is fine)
-			while (UCB0STATW & UCBUSY) {};
+			while (!(UCA0IFG & UCTXIFG)) {};    			// While TXing
+			UCA0TXBUF = (tx_Data_16 >> 8);					// First 8 bits transmitted (Control bits and data)
+			while (!(UCA0IFG & UCTXIFG)) {};
+			UCA0TXBUF = tx_Data_16;							// Last 8 bits transmitted (overflow expected and is fine)
+			while (UCA0STATW & UCBUSY) {};
 			P8OUT |= BIT6;
 			break;
 
 		case 9:
 			P9OUT &= ~BIT6;									// Pulls SYNC low
-			while (!(UCB0IFG & UCTXIFG)) {};    			// While TXing
-			UCB0TXBUF = (tx_Data_16 >> 8);					// First 8 bits transmitted (Control bits and data)
-			while (!(UCB0IFG & UCTXIFG)) {};
-			UCB0TXBUF = tx_Data_16;							// Last 8 bits transmitted (overflow expected and is fine)
-			while (UCB0STATW & UCBUSY) {};
+			while (!(UCA0IFG & UCTXIFG)) {};    			// While TXing
+			UCA0TXBUF = (tx_Data_16 >> 8);					// First 8 bits transmitted (Control bits and data)
+			while (!(UCA0IFG & UCTXIFG)) {};
+			UCA0TXBUF = tx_Data_16;							// Last 8 bits transmitted (overflow expected and is fine)
+			while (UCA0STATW & UCBUSY) {};
 			P9OUT |= BIT6;
 			break;
 
 		case 10:
 			P1OUT &= ~BIT6;									// Pulls SYNC low
-			while (!(UCB0IFG & UCTXIFG)) {};    			// While TXing
-			UCB0TXBUF = (tx_Data_16 >> 8);					// First 8 bits transmitted (Control bits and data)
-			while (!(UCB0IFG & UCTXIFG)) {};
-			UCB0TXBUF = tx_Data_16;							// Last 8 bits transmitted (overflow expected and is fine)
-			while (UCB0STATW & UCBUSY) {};
+			while (!(UCA0IFG & UCTXIFG)) {};    			// While TXing
+			UCA0TXBUF = (tx_Data_16 >> 8);					// First 8 bits transmitted (Control bits and data)
+			while (!(UCA0IFG & UCTXIFG)) {};
+			UCA0TXBUF = tx_Data_16;							// Last 8 bits transmitted (overflow expected and is fine)
+			while (UCA0STATW & UCBUSY) {};
 			P1OUT |= BIT6;
 			break;
 
 		default:
 			P1OUT &= ~BIT6;									// Pulls SYNC low
-			while (!(UCB0IFG & UCTXIFG)) {};    			// While TXing
-			UCB0TXBUF = (tx_Data_16 >> 8);					// First 8 bits transmitted (Control bits and data)
-			while (!(UCB0IFG & UCTXIFG)) {};
-			UCB0TXBUF = tx_Data_16;							// Last 8 bits transmitted (overflow expected and is fine)
-			while (UCB0STATW & UCBUSY) {};
+			while (!(UCA0IFG & UCTXIFG)) {};    			// While TXing
+			UCA0TXBUF = (tx_Data_16 >> 8);					// First 8 bits transmitted (Control bits and data)
+			while (!(UCA0IFG & UCTXIFG)) {};
+			UCA0TXBUF = tx_Data_16;							// Last 8 bits transmitted (overflow expected and is fine)
+			while (UCA0STATW & UCBUSY) {};
 			P1OUT |= BIT6;									// Pulls SYNC high when not busy
 	}
 }
 
 ////////////////////// SPI READ POLLING //////////////////////////////////
 uint8_t read_SPI (void) {
-	while (!(UCB0IFG & UCRXIFG)) {};    			// While RX flag is high
-	g_RXData = UCB0RXBUF;							// First 8 bits transmitted (Control bits and data)
+	while (!(UCA0IFG & UCRXIFG)) {};    			// While RX flag is high
+	g_RXData = UCA0RXBUF;							// First 8 bits transmitted (Control bits and data)
 	return g_RXData;
 }
 
