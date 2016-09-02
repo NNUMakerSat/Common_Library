@@ -14,7 +14,7 @@
 
 uint16_t dac_Val = 0x0000;
 uint8_t tx_Data_8 = 100;
-uint16_t tx_Data_16 = 0;
+uint16_t tx_Data_16 = 0xAAAA;
 
 // main.c
 int main(void) {
@@ -45,7 +45,7 @@ int main(void) {
 		__delay_cycles(1000);
 	} */
 
-	flash_LED_1(1,5);							// Makes Hub wait for reply
+	flash_LED_1(0,5);							// Makes Hub wait for reply
 	LED_1_On();
 
     for (eg_Counter = 0; eg_Counter < 10; ++eg_Counter) { //loop 10 times
@@ -53,7 +53,7 @@ int main(void) {
 //    	write_uint16_SPI (tx_Data_16, device_CS); 						(DAC)
 //    	++dac_Val;
 
-    	write_uint8_SPI (tx_Data_8, device_CS); 	// device 0 is Hub
+    	write_uint16_SPI (tx_Data_16, device_CS); 	// device 0 is Hub
     	tx_Data_16 = tx_Data_16 + 100;				// example data
  //   	flash_LED_1(1,1);
  //   	__delay_cycles(100000);

@@ -62,24 +62,15 @@ void init_SPI (uint8_t pin_Setting) {
 		P1OUT |= BIT2;
 		break;
 	}
-	 // Lock CS registers
-
-	 // Configure USCI_A0 for SPI operation
+	 // Configure USCI_B0 for SPI operation
 	 UCB0CTLW0 |= UCSWRST;                      		// **Put state machine in reset**
 
 	 UCB0CTLW0 |= UCMST | UCSYNC | UCMSB | UCCKPL;		// 3-pin, 8-bit SPI master
 	                                          	  	    // Clock polarity high, MSB
 	 UCB0CTLW0 |= UCSSEL__SMCLK;              	 		// SMCLK
-	 CSCTL3 = DIVS__8;									// Divides SMCLK by 8 (8MHz/8 = 1MHz)
 
-	 // Baud setup, SMCLK is set to 8 MHz
-/*	 	 switch (baud_Rate) {
+	 UCB0BRW = 0x0008;							// Divides SMCLK module by 8 (8MHz/8 = 1MHz)
 
-	 	 default:
-	 		UCB0BR0 = 0x10;                           		// /2  500 kHz baud rate
-	 		UCB0BR1 = 0;                             	 	//
-	 	 }
-*/
 //	 UCA0MCTLW = 0;                           	 	// No modulation
 	 UCB0CTLW0 &= ~UCSWRST;                   	 	// **Initialize USCI state machine**
 }
