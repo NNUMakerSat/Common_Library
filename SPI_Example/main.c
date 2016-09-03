@@ -33,7 +33,7 @@ int main(void) {
 	init_SPI (pin_Setting);
 	// clk_Rate -> 8 = 8MHz, 4 = 4MHz, 2 = 2.67MHz, 1 = 1MHz (currently only at 1MHz)
 	//P1.4 - CLK, P1.6 - SIMO, P1.7 - SOMI
-/*
+
 ////////////////////////// Hub ////////////////////////////////////////
     for (eg_Counter = 0; eg_Counter < 10; ++eg_Counter) { //loop 10 times
     	read_SPI (); 	// device 0 is Hub
@@ -47,10 +47,10 @@ int main(void) {
     while (1) {}
 }
 /////////////////////////// Hub /////////////////////////////////////////////
-*/
 
 
 
+/*
 ////////////////////////// Slave ////////////////////////////////////////
 	flash_LED_1(0,5);							// Makes Hub wait for reply
 	LED_1_On();
@@ -64,7 +64,7 @@ int main(void) {
     }
 }
 /////////////////////////// Slave /////////////////////////////////////////////
-
+*/
 /*	P4DIR |= SCI_1_SEL;
 	P4OUT |= SCI_1_SEL;
 
