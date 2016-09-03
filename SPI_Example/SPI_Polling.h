@@ -6,11 +6,12 @@
  */
 #include <msp430.h>
 #include <stdint.h>
+#include <stdbool.h>
 
 #ifndef SPI_POLLING_H_
 #define SPI_POLLING_H_
 
-void init_SPI (uint8_t pin_Setting);								// initalizes SPI clk rate and which pins are being used
+void init_SPI (uint8_t pin_Setting, bool mast_slav);								// initalizes SPI clk rate and which pins are being used
 void write_uint8_SPI (uint8_t tx_Data_8, uint8_t device_CS);		// writes 8 bits with SPI
 void write_uint16_SPI (uint16_t tx_Data_16, uint8_t device_CS);		// writes 16 bits with SPI
 uint8_t read_SPI (void);											// reads 8 bits with SPI

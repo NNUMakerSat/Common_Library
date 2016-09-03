@@ -21,7 +21,7 @@
 #endif
 
 #ifdef BOARD_NAME_HUB
-#include "msp430fr6989.h""
+	#include "msp430fr6989.h"
 #endif
 
 #endif /* MAKERSAT_H_ */
