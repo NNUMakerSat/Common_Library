@@ -10,6 +10,9 @@ GEN_OPTS__FLAG :=
 GEN_CMDS__FLAG := 
 
 ORDERED_OBJS += \
+"./Initialize.obj" \
+"./LED.obj" \
+"./SPI_Polling.obj" \
 "./main.obj" \
 "../lnk_msp430fr6989.cmd" \
 $(GEN_CMDS__FLAG) \
@@ -153,8 +156,8 @@ SPI_Example.hex: $(EXE_OUTPUTS)
 # Other Targets
 clean:
 	-$(RM) $(EXE_OUTPUTS__QUOTED)$(BIN_OUTPUTS__QUOTED)
-	-$(RM) "main.d" 
-	-$(RM) "main.obj" 
+	-$(RM) "Initialize.d" "LED.d" "SPI_Polling.d" "main.d" 
+	-$(RM) "Initialize.obj" "LED.obj" "SPI_Polling.obj" "main.obj" 
 	-@echo 'Finished clean'
 	-@echo ' '
 
