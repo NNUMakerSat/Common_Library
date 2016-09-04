@@ -47,10 +47,10 @@ void init_SPI (uint8_t pin_Setting, bool mast_slav) {
 		P1SEL1 &= ~(BIT4 | BIT6 | BIT7);
 
 		// configure as GPIO used to enable SPI write from Hub
-//		P4SEL0 &= ~BIT1;
-//		P4SEL1 &= ~BIT1;							// P4.1 - SYNC/Slave Select
-//		P4DIR &= ~BIT1;
-//		P4OUT &= ~BIT1;
+		P4SEL0 &= ~BIT1;
+		P4SEL1 &= ~BIT1;							// P4.1 - SYNC/Slave Select
+		P4DIR |= BIT1;
+		P4OUT &= ~BIT1;
 		break;
 
 	case 3:								// Polymer degradation board - other
@@ -99,11 +99,12 @@ void write_uint8_SPI (uint8_t tx_Data_8, uint8_t device_CS) {
 			break;
 
 		case 1:
-			P4OUT &= ~BIT0;									// Pulls SYNC low
+			UCB0TXBUF = tx_Data_8;
+			P4OUT = BIT1;									// Pulls SYNC low
 			while (!(UCB0IFG & UCTXIFG)) {};				// While TXing
-			UCB0TXBUF = tx_Data_8;							// 8 bits transmitted
+		//	UCB0TXBUF = tx_Data_8;							// 8 bits transmitted
 			while (UCB0STATW & UCBUSY) {};
-			P4OUT |= BIT0;
+			P4OUT &= ~BIT1;
 			break;
 
 		case 2:

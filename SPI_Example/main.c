@@ -18,7 +18,8 @@ uint8_t tx_Data_8 = 100;
 uint16_t tx_Data_16 = 0xAAAA;
 uint8_t g_RXData;						// changed from 8 bit
 uint32_t error_Counter;
-uint8_t array[10] = {10, 20, 30, 40, 50, 60, 70, 80, 90, 100};
+//	uint8_t array[10] = {0x10, 0x20, 0x30, 0x40, 0x50, 0x60, 0x70, 0x80, 0x90, 0x15};		//SB 1
+	uint8_t array[10] = {0x90, 0x89, 0x88, 0x04, 0x05, 0x77, 0x00, 0x55, 0x69, 0x42};		//SB 2
 uint8_t i = 0;
 uint8_t j = 0;
 
@@ -39,19 +40,19 @@ int main(void) {
 	// clk_Rate -> 8 = 8MHz, 4 = 4MHz, 2 = 2.67MHz, 1 = 1MHz (currently only at 1MHz)
 	//P1.4 - CLK, P1.6 - SIMO, P1.7 - SOMI, 4.1 - GPIO
 
-	flash_LED_2(1,10); // make hub wait
-
-	UCB0TXBUF = 0xCC;
+//	flash_LED_2(1,10); // make hub wait
+//	P4OUT |= BIT1;
+//	UCB0TXBUF = 0x50;
 
 ////////////////////////// Hub ////////////////////////////////////////
 //    for (eg_Counter = 0; eg_Counter < 10; ++eg_Counter) { //loop 10 times
-    read_SPI (); 	// device 0 is Hub
-    read[0] = g_RXData;				// saves values read in array
+//    read_SPI (); 	// device 0 is Hub
+//    	read[0] = g_RXData;				// saves values read in array
 //   }
 
     for (i = 0; i < 10; ++i) {
     	write_uint8_SPI (array[i], device_CS);
-    	if (UCB0RXBUF != 0x00) {
+    	if (UCB0RXBUF != 0xAA) {
     		write_uint8_SPI (array[i], device_CS);
     	}
     	//++j;
@@ -79,35 +80,3 @@ int main(void) {
 */
     while (1) {}
 }
-/////////////////////////// Hub /////////////////////////////////////////////
-
-
-
-/*
-////////////////////////// Slave ////////////////////////////////////////
-	flash_LED_1(0,5);							// Makes Hub wait for reply
-	LED_1_On();
-
-    for (eg_Counter = 0; eg_Counter < 10; ++eg_Counter) { //loop 10 times
-    	write_uint16_SPI (tx_Data_16, device_CS); 	// device 0 is Hub
-    }
-
-    while (1) {
-    	flash_LED_2(1,1);
-    }
-}
-/////////////////////////// Slave /////////////////////////////////////////////
-*/
-/*	P4DIR |= SCI_1_SEL;
-	P4OUT |= SCI_1_SEL;
-
-	P1SEL0 &= ~BIT4;
-	P1SEL1 &= ~BIT4;							// P1.4 - SYNC/Slave Select (5k POT)
-	P1SEL0 |= BIT6 + BIT7;
-	P1DIR |= BIT4 + BIT6 + BIT7;
-	P1OUT |= BIT4 + BIT6 + BIT7;
-
-	while (1) {
-		P1OUT ^= BIT4 + BIT6 + BIT7;
-		__delay_cycles(1000);
-	} */
