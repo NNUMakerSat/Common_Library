@@ -31,7 +31,7 @@
 /* ============================================================================ */
 
 /******************************************************************************/
-/* lnk_msp430fr6989.cmd - LINKER COMMAND FILE FOR LINKING MSP430FR6989 PROGRAMS     */
+/* lnk_msp430fr5969.cmd - LINKER COMMAND FILE FOR LINKING MSP430FR5969 PROGRAMS     */
 /*                                                                            */
 /*   Usage:  lnk430 <obj files...>    -o <out file> -m <map file> lnk.cmd     */
 /*           cl430  <src files...> -z -o <out file> -m <map file> lnk.cmd     */
@@ -53,8 +53,8 @@
 
 MEMORY
 {
-    TINYRAM                 : origin = 0x0006, length = 0x001A
-    PERIPHERALS_8BIT        : origin = 0x0020, length = 0x00E0
+    SFR                     : origin = 0x0000, length = 0x0010
+    PERIPHERALS_8BIT        : origin = 0x0010, length = 0x00F0
     PERIPHERALS_16BIT       : origin = 0x0100, length = 0x0100
     RAM                     : origin = 0x1C00, length = 0x0800
     INFOA                   : origin = 0x1980, length = 0x0080
@@ -62,7 +62,7 @@ MEMORY
     INFOC                   : origin = 0x1880, length = 0x0080
     INFOD                   : origin = 0x1800, length = 0x0080
     FRAM                    : origin = 0x4400, length = 0xBB80
-    FRAM2                   : origin = 0x10000,length = 0x14000
+    FRAM2                   : origin = 0x10000,length = 0x4000
     JTAGSIGNATURE           : origin = 0xFF80, length = 0x0004, fill = 0xFFFF
     BSLSIGNATURE            : origin = 0xFF84, length = 0x0004, fill = 0xFFFF
     IPESIGNATURE            : origin = 0xFF88, length = 0x0008, fill = 0xFFFF
@@ -190,7 +190,6 @@ SECTIONS
     .data       : {} > RAM                  /* Global & static vars              */
     .TI.noinit  : {} > RAM                  /* For #pragma noinit                */
     .stack      : {} > RAM (HIGH)           /* Software system stack             */
-    .tinyram    : {} > TINYRAM              /* Tiny RAM                          */
 
     .infoA     : {} > INFOA              /* MSP430 INFO FRAM  Memory segments */
     .infoB     : {} > INFOB
@@ -225,28 +224,28 @@ SECTIONS
     .int24       : {}               > INT24
     .int25       : {}               > INT25
     .int26       : {}               > INT26
-    AES256       : { * ( .int27 ) } > INT27 type = VECT_INIT
-    RTC          : { * ( .int28 ) } > INT28 type = VECT_INIT
-    LCD_C        : { * ( .int29 ) } > INT29 type = VECT_INIT
-    PORT4        : { * ( .int30 ) } > INT30 type = VECT_INIT
-    PORT3        : { * ( .int31 ) } > INT31 type = VECT_INIT
-    TIMER3_A1    : { * ( .int32 ) } > INT32 type = VECT_INIT
-    TIMER3_A0    : { * ( .int33 ) } > INT33 type = VECT_INIT
-    PORT2        : { * ( .int34 ) } > INT34 type = VECT_INIT
-    TIMER2_A1    : { * ( .int35 ) } > INT35 type = VECT_INIT
-    TIMER2_A0    : { * ( .int36 ) } > INT36 type = VECT_INIT
-    PORT1        : { * ( .int37 ) } > INT37 type = VECT_INIT
-    TIMER1_A1    : { * ( .int38 ) } > INT38 type = VECT_INIT
-    TIMER1_A0    : { * ( .int39 ) } > INT39 type = VECT_INIT
-    DMA          : { * ( .int40 ) } > INT40 type = VECT_INIT
-    USCI_B1      : { * ( .int41 ) } > INT41 type = VECT_INIT
-    USCI_A1      : { * ( .int42 ) } > INT42 type = VECT_INIT
-    TIMER0_A1    : { * ( .int43 ) } > INT43 type = VECT_INIT
-    TIMER0_A0    : { * ( .int44 ) } > INT44 type = VECT_INIT
-    ADC12        : { * ( .int45 ) } > INT45 type = VECT_INIT
-    USCI_B0      : { * ( .int46 ) } > INT46 type = VECT_INIT
-    USCI_A0      : { * ( .int47 ) } > INT47 type = VECT_INIT
-    ESCAN_IF     : { * ( .int48 ) } > INT48 type = VECT_INIT
+    .int27       : {}               > INT27
+    .int28       : {}               > INT28
+    .int29       : {}               > INT29
+    AES256       : { * ( .int30 ) } > INT30 type = VECT_INIT
+    RTC          : { * ( .int31 ) } > INT31 type = VECT_INIT
+    PORT4        : { * ( .int32 ) } > INT32 type = VECT_INIT
+    PORT3        : { * ( .int33 ) } > INT33 type = VECT_INIT
+    TIMER3_A1    : { * ( .int34 ) } > INT34 type = VECT_INIT
+    TIMER3_A0    : { * ( .int35 ) } > INT35 type = VECT_INIT
+    PORT2        : { * ( .int36 ) } > INT36 type = VECT_INIT
+    TIMER2_A1    : { * ( .int37 ) } > INT37 type = VECT_INIT
+    TIMER2_A0    : { * ( .int38 ) } > INT38 type = VECT_INIT
+    PORT1        : { * ( .int39 ) } > INT39 type = VECT_INIT
+    TIMER1_A1    : { * ( .int40 ) } > INT40 type = VECT_INIT
+    TIMER1_A0    : { * ( .int41 ) } > INT41 type = VECT_INIT
+    DMA          : { * ( .int42 ) } > INT42 type = VECT_INIT
+    USCI_A1      : { * ( .int43 ) } > INT43 type = VECT_INIT
+    TIMER0_A1    : { * ( .int44 ) } > INT44 type = VECT_INIT
+    TIMER0_A0    : { * ( .int45 ) } > INT45 type = VECT_INIT
+    ADC12        : { * ( .int46 ) } > INT46 type = VECT_INIT
+    USCI_B0      : { * ( .int47 ) } > INT47 type = VECT_INIT
+    USCI_A0      : { * ( .int48 ) } > INT48 type = VECT_INIT
     WDT          : { * ( .int49 ) } > INT49 type = VECT_INIT
     TIMER0_B1    : { * ( .int50 ) } > INT50 type = VECT_INIT
     TIMER0_B0    : { * ( .int51 ) } > INT51 type = VECT_INIT
@@ -342,5 +341,5 @@ SECTIONS
 /* Include peripherals memory map                                           */
 /****************************************************************************/
 
--l msp430fr6989.cmd
+-l msp430fr5969.cmd
 

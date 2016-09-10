@@ -2,7 +2,8 @@
 #include <stdint.h>
 #include "Initialize.h"
 //#include "LED.h"
-#include "SPI_Polling.h"
+//#include "SPI_Polling.h"
+#include "SPI_Main.h"
 
 #define DAC_PD_NORMAL 0x3FFF
 #define DAC_PD_LOWPOWER 0x2FFF
