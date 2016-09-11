@@ -19,6 +19,7 @@
 ///////////////////////////////////////////////////////
 
 uint8_t g_RXData;
+uint32_t debug = 0;
 
 ////////////////////// SPI INIT /////////////////////////////////////
 void init_SPI (uint8_t pin_Setting, bool mast_slav) {
@@ -32,8 +33,10 @@ void init_SPI (uint8_t pin_Setting, bool mast_slav) {
 		// configure as GPIO used to enable SPI write from Hub
 		P4SEL0 &= ~BIT1;
 		P4SEL1 &= ~BIT1;							// P4.1 - GPIO Slave Ready Line (input)
-		P4DIR &= ~BIT1;
-		P4IN |= BIT1;
+	//	P4DIR &= ~BIT1;
+		P4DIR |= BIT1;
+		P4OUT &= ~BIT1;
+	//.	P4IN |= BIT1;
 		break;
 
 	case 1:											// MSP430FR5969 -> Hub
@@ -42,10 +45,10 @@ void init_SPI (uint8_t pin_Setting, bool mast_slav) {
 		P2SEL0 |= BIT2;              				// P2.2 - CLK
 
 		// configure as GPIO used to enable SPI write to Hub
-		P4SEL0 &= ~BIT1;
-		P4SEL1 &= ~BIT1;							// P4.1 - GPIO Slave Ready Line (output)
-		P4DIR |= BIT1;
-		P4OUT |= BIT1;
+		P4SEL0 &= ~BIT3;
+		P4SEL1 &= ~BIT3;							// P4.3 - GPIO Slave Ready Line (output)
+		P4DIR |= BIT3;
+		P4OUT &= ~BIT3;
 		break;
 
 	case 2:											// Polymer degradation board - POT
@@ -105,10 +108,13 @@ void write_uint8_SPI (uint8_t tx_Data_8, uint8_t device_CS) {
 
 		case 1:												// MSP430FR5969 -> Hub
 			UCB0TXBUF = tx_Data_8;							// Loads data into TX buffer
-			P4OUT |= BIT1;									// Pulls GPIO high
+	//		P4OUT |= BIT3;									// Pulls GPIO high
+			P4OUT |= BIT1;
 			while (!(UCB0IFG & UCTXIFG)) {};				// While TXing
 			while (UCB0STATW & UCBUSY) {};
-//			P4OUT &= ~BIT1;
+		//	P4OUT &= ~BIT3;
+			P4OUT &= ~BIT1;
+			++debug;
 			break;
 
 		case 2:												// POT
