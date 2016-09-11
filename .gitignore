@@ -147,3 +147,4 @@ Circular_Buffer/Debug/makefile
 Initialize/Debug/makefile
 SPI_Polling/Debug/makefile
 SPI_Example/Debug/makefile
+SPI_Hub/Debug/makefile
