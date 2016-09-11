@@ -40,7 +40,8 @@ void SCI_Loop()
 			while(g_RXData != 0xFF){
 				if (!(P4IN & BIT1)){
 					while (!(P4IN & BIT1)) {}							// Waits for GPIO to go high
-					read_SPI ();
+//					read_SPI ();
+					Read_SB_SPI ();
 					data2[i] = g_RXData;
 				}
 				i++;
@@ -54,7 +55,8 @@ void SCI_Loop()
 			while(g_RXData != 0xFF){
 				if (!(P4IN & BIT1)){
 					while (!(P4IN & BIT1)) {}							// Waits for GPIO to go high
-					read_SPI ();
+//					read_SPI ();
+					Read_SB_SPI ();
 					data3[i] = g_RXData;
 				}
 				i++;
@@ -86,7 +88,8 @@ int main(void) {
 	P9IN = 0x00;
 	P9OUT = 0x00;
 
-	init_SPI (pin_Setting);
+//	init_SPI (pin_Setting);
+	init_SPI (pin_Setting, device_CS);
 	// clk_Rate -> 8 = 8MHz, 4 = 4MHz, 2 = 2.67MHz, 1 = 1MHz (currently only at 1MHz)
 	//P1.4 - CLK, P1.6 - SIMO, P1.7 - SOMI
 /*
