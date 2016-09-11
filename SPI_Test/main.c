@@ -25,6 +25,48 @@ uint8_t tx_Data_8 = 0x40;
 //uint16_t tx_Data_16 = 0xBADD;
 uint8_t g_RXData;
 
+enum SCI_States { SCI_SMStart, SCI_2, SCI_3, SCI_Done} SCI_State;
+
+void SCI_Loop()
+{
+	switch(SCI_State){
+		case SCI_SMStart:
+			SCI_State = SCI_2;
+			break;
+
+		case SCI_2:
+			P4OUT |= BIT5;
+			P4OUT &= ~(BIT4 & BIT6 & BIT7);
+			while(g_RXData != 0xFF){
+				if (!(P4IN & BIT1)){
+					while (!(P4IN & BIT1)) {}							// Waits for GPIO to go high
+					read_SPI ();
+					data2[i] = g_RXData;
+				}
+				i++;
+			}
+			SCI_State = SCI_3;
+			break;
+
+		case SCI_3:
+	    	P4OUT |= BIT6;
+			P4OUT &= ~(BIT4 & BIT5 & BIT7);
+			while(g_RXData != 0xFF){
+				if (!(P4IN & BIT1)){
+					while (!(P4IN & BIT1)) {}							// Waits for GPIO to go high
+					read_SPI ();
+					data3[i] = g_RXData;
+				}
+				i++;
+			}
+			SCI_State = SCI_Done;
+			break;
+
+		case SCI_Done:
+			P9OUT = BIT0;
+			while (1){}
+			break;
+
 // main.c
 int main(void) {
 	WDTCTL = WDTPW | WDTHOLD;               // Stop watchdog timer
@@ -74,36 +116,10 @@ int main(void) {
 
 //	write_uint8_SPI (tx_Data_8, device_CS); 	// device 0 is Hub
 
-
+	SCI_State = SMStart;
     while (1) {
-		if (SCI_board == 2){
-			P4OUT |= BIT5;
-			P4OUT &= ~(BIT4 & BIT6 & BIT7);
-		}
-		if (SCI_board == 3){
-	    	P4OUT |= BIT6;
-			P4OUT &= ~(BIT4 & BIT5 & BIT7);
-		}
-    	for (j = 2; j < 5; j++){
-    	if (!(P4IN & BIT1)){
-    	while (!(P4IN & BIT1)) {}							// Waits for GPIO to go high
-    		read_SPI ();
-    		if (SCI_board == 2){
-    			data2[i] = g_RXData;
-    		}
-    		if (SCI_board == 3){
-        		data3[i] = g_RXData;
-    		}
-    		if (g_RXData == 0xFF){
-    		SCI_board = 3;
-    		if ((g_RXData == 0xFF) & (SCI_board == 3)){
-    			P9OUT = BIT0;
-    		}
-    		}
-    		i++;
+    SCI_Loop();
     }
-}
-}
 }
 /////////////////////////// Slave /////////////////////////////////////////////
 
