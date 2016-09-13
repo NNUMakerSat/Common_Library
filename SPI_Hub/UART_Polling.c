@@ -26,7 +26,7 @@ void init_UART (bool baud_Rate, bool pin_Setting) {
 		P2SEL1 &= ~UART_RADIO_BUSY;				// P2.2 - Radio Busy line
 		P2DIR &= ~UART_RADIO_BUSY;
 		P2IN &= ~UART_RADIO_BUSY;
-		break;8
+		break;
 
 	case 1:
 		// Configure Secondary Function Pins
