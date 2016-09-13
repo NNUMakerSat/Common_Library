@@ -117,7 +117,7 @@ int main(void) {
 	P9IN = 0x00;
 	P9OUT = 0x00;
 
-//	init_SPI (pin_Setting);
+
 	init_SPI (pin_Setting, device_CS);
 	// clk_Rate -> 8 = 8MHz, 4 = 4MHz, 2 = 2.67MHz, 1 = 1MHz (currently only at 1MHz)
 	//P1.4 - CLK, P1.6 - SIMO, P1.7 - SOMI
