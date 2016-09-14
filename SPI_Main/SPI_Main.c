@@ -108,12 +108,12 @@ void write_uint8_SPI (uint8_t tx_Data_8, uint8_t device_CS) {
 
 		case 1:												// MSP430FR5969 -> Hub
 			UCB0TXBUF = tx_Data_8;							// Loads data into TX buffer
-			P4OUT |= BIT3;									// Pulls GPIO high
-	//		P4OUT |= BIT1;
+	//		P4OUT |= BIT3;									// Pulls GPIO high
+			P4OUT |= BIT1;
 			while (!(UCB0IFG & UCTXIFG)) {};				// While TXing
 			while (UCB0STATW & UCBUSY) {};
-			P4OUT &= ~BIT3;
-	//		P4OUT &= ~BIT1;
+	//		P4OUT &= ~BIT3;
+			P4OUT &= ~BIT1;
 			++debug;
 			break;
 

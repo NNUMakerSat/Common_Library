@@ -153,14 +153,16 @@ int main(void) {
     SCI_Loop();
     } */
 
-/*	for (SPI_Counter = 0; SPI_Counter < 10; SPI_Counter++) {						// reads 10 bytes from SB 5969
+	for (SPI_Counter = 0; SPI_Counter < 10; SPI_Counter++) {						// reads 10 bytes from SB 5969
 		SCI_Loop();
 	}
-*/
-	for (test = 0; test < 30; ++test) {
+
+/*	for (test = 0; test < 30; ++test) {
 			write_Buffer(example_RAD[test]);
 			rxByteCount++;
-		}
+		} */
+	P1DIR |= BIT0;
+	P1OUT |= BIT0;
 
 	Packetizer(source_ID, rxByteCount);												// packetizes info
 

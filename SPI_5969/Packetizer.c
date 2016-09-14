@@ -121,7 +121,7 @@ uint8_t get_POLY_Data(uint8_t index) {
 }
 
 uint8_t get_Data (uint8_t index, uint32_t source_ID) {
-	swtich (source_ID) {
+	switch (source_ID) {
 	case 0:
 	default:
 		return IMU_Bytes[index];
