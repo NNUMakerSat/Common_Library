@@ -17,18 +17,6 @@ void initialize_Clocks(void) {								// Sets all clocks to standard position
 	// Disable the GPIO power-on default high-impedance mode to activate
 	// previously configured port settings
 
-
-/*	CSCTL0_H = CSKEY >> 8;                    // Unlock CS registers (allows for change in clock)
-	CSCTL1 = DCOFSEL_6;                       // Set DCO to 8MHz (option to go to 16 MHz but FRAM doesn't like above 8MHz)
-	CSCTL2 = SELA__LFXTCLK | SELS__HFXTCLK | SELM__DCOCLK;
-	CSCTL3 = DIVA__1 | DIVS__1 | DIVM__1;     // Set all dividers to 1 (all CLKS at highest frequency)
-	CSCTL4 |= LFXTDRIVE_3 | HFXTDRIVE_3;
-	CSCTL4 &= ~(LFXTOFF | HFXTOFF);
-/*	do
-	{
-		CSCTL5 &= ~LFXTOFFG;       	// Clear XT1 fault flag
-	    SFRIFG1 &= ~OFIFG;
-	}while (SFRIFG1&OFIFG);                 	  // Test oscillator fault flag */
 		CSCTL0_H = 0;                             // Lock CS registers (does not allow change in clock) */
 
 	// XT1 Setup
@@ -52,21 +40,10 @@ void initialize_Ports(void){			// sets all pins on all ports as an output (excep
 	P2DIR |= 0xFFFF;
 	P3DIR |= 0xFFFF;
 	P4DIR |= 0xFFFF;
-//	P5DIR |= 0xFFFF;
-//	P6DIR |= 0xFFFF;
-//	P7DIR |= 0xFFFF;
-//	P8DIR |= 0xFFFF;
-//	P9DIR |= 0xFFFF;
-//	P10DIR |= 0xFFFF;					// Pins 0, 1, and 2 are the only ones to exist on Port 10
 
 	P1OUT = 0x0000;						// sets all pins on all ports to a low output (redundant)
 	P2OUT = 0x0000;
 	P3OUT = 0x0000;
 	P4OUT = 0x0000;
-//	P5OUT = 0x0000;
-//	P6OUT = 0x0000;
-//	P7OUT = 0x0000;
-//	P8OUT = 0x0000;
-//	P9OUT = 0x0000;
-//	P10OUT = 0x0000;
+
 }

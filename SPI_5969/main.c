@@ -45,9 +45,10 @@ int main(void) {
 //	UCB0TXBUF = 0x50;
 
 	////////////////////
-	init_SPI (0, device_CS);  //gpio p4.3
+	init_SPI (1, device_CS);  //gpio p4.3 / P1.6 - SIMO, P1.7 - SOMI, P2.2 - CLK
 	/////////////////////
-
+	P1DIR |= BIT0;			//LED2
+	P1OUT |= BIT0;
 ////////////////////////// Hub ////////////////////////////////////////
 //    for (eg_Counter = 0; eg_Counter < 10; ++eg_Counter) { //loop 10 times
 //    read_SPI (); 	// device 0 is Hub
@@ -82,7 +83,8 @@ int main(void) {
         	write_uint16_SPI (read[eg_Counter2], device_CS); 	// device 0 is Hub
        }
 */
-    P1DIR |= BIT0;
-    P1OUT |= BIT0;
+    P4DIR |= BIT6;				//turn on LED1
+    P4OUT |= BIT6;
+
     while (1) {}
 }
