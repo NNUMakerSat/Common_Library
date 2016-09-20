@@ -46,6 +46,7 @@ int main(void) {
 
 	////////////////////
 	init_SPI (1, device_CS);  //gpio p4.3 / P1.6 - SIMO, P1.7 - SOMI, P2.2 - CLK
+								// secondary pins not primary
 	/////////////////////
 	P1DIR |= BIT0;			//LED2
 	P1OUT |= BIT0;

@@ -41,8 +41,8 @@ void init_SPI (uint8_t pin_Setting, bool mast_slav) {
 
 	case 1:											// MSP430FR5969 -> Hub
 		// Configure Primary Function Pins
-		P1SEL0 |= BIT6 | BIT7;              		// P1.6 - SIMO, P1.7 - SOMI
-		P2SEL0 |= BIT2;              				// P2.2 - CLK
+		P1SEL1 |= BIT6 | BIT7;              		// P1.6 - SIMO, P1.7 - SOMI
+		P2SEL1 |= BIT2;              				// P2.2 - CLK
 
 		// configure as GPIO used to enable SPI write to Hub
 		P4SEL0 &= ~BIT3;
