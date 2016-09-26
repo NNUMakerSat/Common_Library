@@ -40,15 +40,15 @@ void init_SPI (uint8_t pin_Setting, bool mast_slav) {
 		break;
 
 	case 1:											// MSP430FR5969 -> Hub
-		// Configure Primary Function Pins
+		// Configure Secondary Function Pins
 		P1SEL1 |= BIT6 | BIT7;              		// P1.6 - SIMO, P1.7 - SOMI
 		P2SEL1 |= BIT2;              				// P2.2 - CLK
 
 		// configure as GPIO used to enable SPI write to Hub
-		P4SEL0 &= ~BIT3;
-		P4SEL1 &= ~BIT3;							// P4.3 - GPIO Slave Ready Line (output)
-		P4DIR |= BIT3;
-		P4OUT &= ~BIT3;
+		P3SEL0 &= ~BIT5;
+		P3SEL1 &= ~BIT5;							// P4.3 - GPIO Slave Ready Line (output)
+		P3DIR |= BIT5;
+		P3OUT &= ~BIT5;
 		break;
 
 	case 2:											// Polymer degradation board - POT
@@ -108,12 +108,12 @@ void write_uint8_SPI (uint8_t tx_Data_8, uint8_t device_CS) {
 
 		case 1:												// MSP430FR5969 -> Hub
 			UCB0TXBUF = tx_Data_8;							// Loads data into TX buffer
-			P4OUT |= BIT3;									// Pulls GPIO high
-	//		P4OUT |= BIT1;
+			P3OUT |= BIT5;									// Pulls GPIO high
+	//		P4OUT |= BIT3;
 			while (!(UCB0IFG & UCTXIFG)) {};				// While TXing
 			while (UCB0STATW & UCBUSY) {};
-			P4OUT &= ~BIT3;
-	//		P4OUT &= ~BIT1;
+			P3OUT &= ~BIT5;
+	//		P4OUT &= ~BIT3;
 			++debug;
 			break;
 

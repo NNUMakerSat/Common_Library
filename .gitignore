@@ -149,3 +149,4 @@ SPI_Polling/Debug/makefile
 SPI_Example/Debug/makefile
 SPI_Hub/Debug/makefile
 UART_Polling/Debug/makefile
+*.prefs

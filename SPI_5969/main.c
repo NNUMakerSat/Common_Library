@@ -19,9 +19,11 @@ uint16_t tx_Data_16 = 0xAAAA;
 uint8_t g_RXData;						// changed from 8 bit
 uint32_t error_Counter;
 //	uint8_t array[10] = {0x10, 0x20, 0x30, 0x40, 0x50, 0x60, 0x70, 0x80, 0x90, 0x15};		//SB 1
-	uint8_t array[10] = {0x90, 0x89, 0x88, 0x04, 0x05, 0x77, 0x00, 0x55, 0x69, 0x42};		//SB 2
+//	uint8_t array[10] = {0x90, 0x89, 0x88, 0x04, 0x05, 0x77, 0x00, 0x55, 0x69, 0x42};		//SB 2
+	uint8_t array[10] = {0x50, 0x51, 0x52, 0x53, 0x54, 0x55, 0x56, 0x57, 0x58, 0x59};		//SB 2
 uint8_t i = 0;
 uint8_t j = 0;
+uint8_t hand_Shake_Rec = 0xCC;
 
 // main.c
 int main(void) {
@@ -55,6 +57,8 @@ int main(void) {
 //    read_SPI (); 	// device 0 is Hub
 //    	read[0] = g_RXData;				// saves values read in array
 //   }
+
+//	write_uint8_SPI (hand_Shake_Rec, device_CS);
 
     for (i = 0; i < 10; ++i) {
     	write_uint8_SPI (array[i], device_CS);
