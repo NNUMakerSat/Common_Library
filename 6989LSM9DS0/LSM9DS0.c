@@ -8,12 +8,7 @@
 #include <stdint.h>
 #include "LSM9DS0.h"
 #include "i2c.h"
-
-
-#define G_GAIN	0.07		//[deg/s/LSB]
-#define A_GAIN	0.732		//[mg/LSB]
-#define M_GAIN  0.48		//[mgauss/LSB]
-#define thousand	1000
+#include "Circular_Buffer.h"
 
 char xRate_L = 0;  // Variable to hold X_Low register value
 char xRate_H = 0;  // Variable to hold X_High register value
@@ -44,6 +39,17 @@ float magnet_x_array[10];
 float magnet_y_array[10];
 float magnet_z_array[10];
 uint8_t i = 0;
+
+float g_x_average = 0;
+float g_y_average = 0;
+float g_z_average = 0;
+float rate_gyr_x_average = 0;
+float rate_gyr_y_average = 0;
+float rate_gyr_z_average = 0;
+float magnet_x_average = 0;
+float magnet_y_average = 0;
+float magnet_z_average = 0;
+uint8_t j = 0;
 
 int32_t gyrRawx = 0;
 int32_t gyrRawy = 0;
@@ -154,4 +160,41 @@ void run_IMU(void) {
 		magnet_z = 0;
 	}
 
+	for (j = 0; j < 10; j++) {
+	g_x_average = g_x_average + g_x_array[j];
+	g_y_average = g_y_average + g_y_array[j];
+	g_z_average = g_z_average + g_z_array[j];
+	rate_gyr_x_average = rate_gyr_x_average + rate_gyr_x_array[j];
+	rate_gyr_y_average = rate_gyr_y_average + rate_gyr_y_array[j];
+	rate_gyr_z_average = rate_gyr_z_average + rate_gyr_z_array[j];
+	magnet_x_average = magnet_x_average + magnet_x_array[j];
+	magnet_y_average = magnet_y_average + magnet_y_array[j];
+	magnet_z_average = magnet_z_average + magnet_z_array[j];
+	}
+
+	g_x_average = g_x_average / ten;
+	g_y_average = g_y_average / ten;
+	g_z_average = g_z_average / ten;
+	rate_gyr_x_average = rate_gyr_x_average / ten;
+	rate_gyr_y_average = rate_gyr_y_average / ten;
+	rate_gyr_z_average = rate_gyr_z_average / ten;
+	magnet_x_average = magnet_x_average / ten;
+	magnet_y_average = magnet_y_average / ten;
+	magnet_z_average = magnet_z_average / ten;
+
+	write_Buffer(g_x_average);
+	write_Buffer(g_y_average);
+	write_Buffer(g_z_average);
+	write_Buffer(rate_gyr_x_average);
+	write_Buffer(rate_gyr_y_average);
+	write_Buffer(rate_gyr_z_average);
+	write_Buffer(magnet_x_average);
+	write_Buffer(magnet_y_average);
+	write_Buffer(magnet_z_average);
 }
+
+/*
+ * Excuse the notes Braden, I just want to remember.
+ * we want float for output. make circular buffer do that.
+ * Also, do we want to crop any values to put in packet?
+ */

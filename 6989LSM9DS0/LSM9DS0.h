@@ -12,8 +12,13 @@ void initGyro(void);
 void initXM(void);
 void run_IMU(void);
 
-#define GAddress				0x6A			//Use 6A on berryIMU, 6B on Hub
-#define XMAddress 					0x1E					//Use 1E on berryIMU, 1D on Hub
+#define GAddress					0x6A		//Use 6A on berryIMU, 6B on Hub
+#define XMAddress 					0x1E		//Use 1E on berryIMU, 1D on Hub
+#define G_GAIN						0.07		//[deg/s/LSB]
+#define A_GAIN						0.732		//[mg/LSB]
+#define M_GAIN  					0.48		//[mgauss/LSB]
+#define thousand					1000
+#define ten							10
 
 #define WHO_AM_I_G					0x0F
 #define CTRL_REG1_G					0x20
