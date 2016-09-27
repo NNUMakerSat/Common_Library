@@ -8,6 +8,13 @@
 #ifndef LSM9DS0_H_
 #define LSM9DS0_H_
 
+void initGyro(void);
+void initXM(void);
+void run_IMU(void);
+
+#define GAddress				0x6A			//Use 6A on berryIMU, 6B on Hub
+#define XMAddress 					0x1E					//Use 1E on berryIMU, 1D on Hub
+
 #define WHO_AM_I_G					0x0F
 #define CTRL_REG1_G					0x20
 #define CTRL_REG2_G					0x21
@@ -89,14 +96,5 @@
 #define TIME_WINDOW					0x3D
 #define Act_THS						0x3E
 #define Act_DUR						0x3F
-
-
-//ITG3200 registers//
-//#define GYRO_XOUT_H					0x1D
-//#define GYRO_XOUT_L					0x1E
-//#define GYRO_YOUT_H					0x1F
-//#define GYRO_YOUT_L					0x20
-//#define GYRO_ZOUT_H					0x21
-//#define GYRO_ZOUT_L					0x22
 
 #endif /* LSM9DS0_H_ */
