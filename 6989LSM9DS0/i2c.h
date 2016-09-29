@@ -9,7 +9,8 @@
 
 void init_i2c(void);
 
-void single_byte_write_i2c(uint8_t slaveAddress, uint8_t registerAddress, uint8_t setBits);
+void single_byte_write_i2c(uint8_t slaveAddress, uint8_t registerAddress,
+		uint8_t setBits);
 
 char single_byte_read_i2c(uint8_t slaveAddress, uint8_t registerAddress);
 

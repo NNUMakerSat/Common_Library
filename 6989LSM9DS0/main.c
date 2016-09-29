@@ -14,13 +14,15 @@
 //            |              VIO|<--'3.3V     |                 |
 //            |              INT|             |                 |
 
-//  Original code modified by Braden Grim
+//  Author: BGrim
 //******************************************************************************
 #include <msp430fr6989.h>
 #include <stdio.h>
 #include <stdint.h>
 #include "LSM9DS0.h"
 #include "i2c.h"
+
+float Temperature = 0;
 
 int main(void) {
 	WDTCTL = WDTPW + WDTHOLD;                 				// Stop WDT
@@ -43,6 +45,7 @@ int main(void) {
 	__delay_cycles(800);
 
 	while (1) {
-	run_IMU();
+		run_IMU();
+		Temperature = read_Temp();
 	}
 }

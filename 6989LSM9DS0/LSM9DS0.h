@@ -11,6 +11,10 @@
 void initGyro(void);
 void initXM(void);
 void run_IMU(void);
+float read_Temp(void);
+void read_Gyro(void);
+void read_Acc(void);
+void read_Mag(void);
 
 #define GAddress					0x6A		//Use 6A on berryIMU, 6B on Hub
 #define XMAddress 					0x1E		//Use 1E on berryIMU, 1D on Hub
@@ -19,6 +23,8 @@ void run_IMU(void);
 #define M_GAIN  					0.48		//[mgauss/LSB]
 #define thousand					1000
 #define ten							10
+#define eight						8
+#define twenty_one					21
 
 #define WHO_AM_I_G					0x0F
 #define CTRL_REG1_G					0x20
